@@ -38,9 +38,10 @@ class clean_pyc(Command):
     def run(self):
         files = self.find_compiled_files()
         log.info("cleaning compiled python files in %s ..." % self.root)
-        for file_ in files:
-            log.debug("removing %s " % file_)
-            os.remove(file_)
+        if not self.dry_run:
+            for file_ in files:
+                log.debug("removing %s " % file_)
+                os.remove(file_)
 
 class clean_all(clean.clean, clean_pyc):
     description = """Clean root dir from temporary files, complied files, etc."""
@@ -51,12 +52,9 @@ class clean_all(clean.clean, clean_pyc):
 
     def finalize_options(self):
         clean.clean.finalize_options(self)
+        self.all = True
         clean_pyc.finalize_options(self)
 
     def run(self):
         clean.clean.run(self)
         clean_pyc.run(self)
-        for d in ['dist', 'build']:
-            path = os.path.join(self.root, d)
-            if os.path.exists(path):
-                shutil.rmtree(path, True)
