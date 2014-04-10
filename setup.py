@@ -59,4 +59,4 @@ if setuptools:
         test_suite = 'tests',
     )
 
-setup(**params)
+dist = setup(**params)
