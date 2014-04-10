@@ -9,7 +9,7 @@ import shutil
 from distutils import log
 from distutils.core import Command
 from distutils.command import clean
-import common
+import util
 
 class clean_pyc(Command):
     description = """Clean root dir from complied python files"""
@@ -31,7 +31,7 @@ class clean_pyc(Command):
         """
         files = []
         for ext in self.extensions:
-            extfiles = common.find_files(self.root, "*.%s" % ext)
+            extfiles = util.find_files(self.root, "*.%s" % ext)
             log.debug("found %d .%s files in %s" % (len(extfiles), ext, self.root))
             files.extend(extfiles)
             del extfiles

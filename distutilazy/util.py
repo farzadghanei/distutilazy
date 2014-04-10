@@ -1,7 +1,7 @@
 """
-distutility.common
+distutility.util
 
-Defines common utility functions
+Defines utility functions
 """
 
 import os
