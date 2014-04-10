@@ -1,4 +1,4 @@
 distutilazy
-===========
+~~~~~~~~~~~
 
 Extra distutils commands

@@ -15,6 +15,7 @@ except ImportError:
     from distutils.core import setup
 
 import distutilazy
+import distutilazy.clean
 
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
@@ -35,18 +36,18 @@ CLASSIFIERS = [
 
 long_description = "Extra distutils commands"
 # read long description
-with open(os.path.join(os.path.dirname(__file__), 'README.rst') as fh:
+with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as fh:
     long_description = fh.read()
 
 params = dict(
-    name = APP_NAME,
+    name = 'distutilazy',
     packages = setuptools and find_packages() or ['distutilazy', 'tests'],
-    version = __version__,
+    version = distutilazy.version,
     description = "Extra distutils commands",
     long_description = long_description,
     license = 'MIT',
     classifiers = CLASSIFIERS,
-    cmdclass = {"clean_py": distutilazy.clean.clean_py, "clean_all": distutilazy.clean.clean_all}
+    cmdclass = {"clean_pyc": distutilazy.clean.clean_pyc, "clean_all": distutilazy.clean.clean_all}
 )
 
 if setuptools:
