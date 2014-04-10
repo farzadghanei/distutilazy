@@ -16,7 +16,7 @@ class clean_pyc(Command):
         self.root = os.getcwd()
         self.extensions = 'pyc,pyo,pyd'
 
-    def finialize_options(self):
+    def finalize_options(self):
         if not os.path.exists(self.root):
             raise IOError("Failed to access root path %s" % self.root)
         self.extensions = [ext.strip() for ext in self.extensions.split(',')]
@@ -30,7 +30,7 @@ class clean_pyc(Command):
         for ext in self.extensions:
             extfiles = common.find_files(self.root, "*.%s" % ext)
             log.debug("found %d .%s files in %s" % (len(extfiles), ext, self.root))
-            files.extend(extfiels)
+            files.extend(extfiles)
             del extfiles
         log.info("found %d compiled python files in %s" % (len(files), self.root))
         return files
