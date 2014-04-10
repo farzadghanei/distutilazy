@@ -45,6 +45,14 @@ class clean_pyc(Command):
 class clean_all(clean.clean, clean_pyc):
     description = """Clean root dir from temporary files, complied files, etc."""
 
+    def initialize_options(self):
+        clean.clean.initialize_options(self)
+        clean_pyc.initialize_options(self)
+
+    def finalize_options(self):
+        clean.clean.finalize_options(self)
+        clean_pyc.finalize_options(self)
+
     def run(self):
         clean.clean.run(self)
         clean_pyc.run(self)
