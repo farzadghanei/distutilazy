@@ -1,5 +1,8 @@
-# This file is part of distutilazy released under the MIT license.
-# See the LICENSE for more information.
+"""
+distutility.clean
+
+commands to help clean files
+"""
 
 import os
 import shutil
@@ -22,9 +25,9 @@ class clean_pyc(Command):
         self.extensions = [ext.strip() for ext in self.extensions.split(',')]
 
     def find_compiled_files(self):
-        """Finds compiled Python files recursively in the root path
+        """Find compiled Python files recursively in the root path
 
-        :returns: list of absolute file paths
+        :return: list of absolute file paths
         """
         files = []
         for ext in self.extensions:

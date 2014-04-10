@@ -1,15 +1,18 @@
-# This file is part of distutilazy released under the MIT license.
-# See the LICENSE for more information.
+"""
+distutility.common
+
+Defines common utility functions
+"""
 
 import os
 import fnmatch
 
 def find_files(root, pattern):
-    """Finds all files matching the glob pattern recursively
+    """Find all files matching the glob pattern recursively
 
     :param root: string
     :param pattern: string
-    :return list of filepaths relative to root
+    :return: list of filepaths relative to root
     """
     results = []
     for base, dirs, files in os.walk(root):

@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
-# This file is part of distutilazy released under the MIT license.
-# See the LICENSE for more information.
+"""
+distutility setup.py
+
+:License: MIT License
+"""
 
 import os
 import sys
