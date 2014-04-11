@@ -64,7 +64,7 @@ class clean_all(clean.clean, clean_pyc):
     def clean_egg_info(self):
         dirname = self.get_egg_info_dir()
         if not os.path.exists(dirname):
-            log.warn("can't clean egg info, %s does not exists" % dirname)
+            log.warn("'%s' does not exist -- can't clean it" % dirname)
             return
         self.announce("cleaning %s" % dirname)
         if not self.dry_run:
