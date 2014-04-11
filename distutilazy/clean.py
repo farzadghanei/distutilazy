@@ -13,7 +13,7 @@ import util
 
 class clean_pyc(Command):
     description = """Clean root dir from complied python files"""
-    user_options = [("root", "r", "path to root dir")]
+    user_options = [("root=", "r", "path to root dir")]
 
     def initialize_options(self):
         self.root = os.getcwd()
