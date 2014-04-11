@@ -6,7 +6,7 @@ test_clean
 unittesting for clean module
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.2"
 
 import sys
 import os
@@ -17,6 +17,14 @@ from distutilazy import clean
 from distutils.dist import Distribution
 
 class TestCommon(unittest.TestCase):
+
+    def test_clean_all(self):
+        dist = Distribution()
+        dist.metadata.name = 'testdist'
+        cl = clean.clean_all(dist)
+        cl.initialize_options()
+        cl.finalize_options()
+        self.assertEquals(cl.get_egg_info_dir(), 'testdist.egg-info')
 
     def test_clean_pyc(self):
         dist = Distribution()

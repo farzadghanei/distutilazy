@@ -19,8 +19,8 @@ class TestCommon(unittest.TestCase):
 
     def test_util_find_files(self):
         me = os.path.realpath(__file__)
-        files = util.find_files(TEST_DIR, 'test_util.py')
-        self.assertEqual(files, [me])
+        files = util.find_files(TEST_DIR, 'test_util.py*')
+        self.assertTrue(me in files)
         files = util.find_files(TEST_DIR, 'not_existing_file.py')
         self.assertEqual(files, [])
 

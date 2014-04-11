@@ -35,12 +35,12 @@ class clean_pyc(Command):
             log.debug("found %d .%s files in %s" % (len(extfiles), ext, self.root))
             files.extend(extfiles)
             del extfiles
-        log.info("found %d compiled python files in %s" % (len(files), self.root))
+        self.announce("found %d compiled python files in %s" % (len(files), self.root))
         return files
 
     def run(self):
         files = self.find_compiled_files()
-        log.info("cleaning compiled python files in %s ..." % self.root)
+        self.announce("cleaning compiled python files in %s ..." % self.root)
         if not self.dry_run:
             for file_ in files:
                 log.debug("removing %s " % file_)
@@ -58,6 +58,19 @@ class clean_all(clean.clean, clean_pyc):
         self.all = True
         clean_pyc.finalize_options(self)
 
+    def get_egg_info_dir(self):
+        return "%s.egg-info" % self.distribution.metadata.get_name()
+
+    def clean_egg_info(self):
+        dirname = self.get_egg_info_dir()
+        if not os.path.exists(dirname):
+            log.warn("can't clean egg info, %s does not exists" % dirname)
+            return
+        self.announce("cleaning %s" % dirname)
+        if not self.dry_run:
+            shutil.rmtree(dirname, True)
+
     def run(self):
         clean.clean.run(self)
         clean_pyc.run(self)
+        self.clean_egg_info()
