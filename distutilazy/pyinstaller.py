@@ -17,19 +17,14 @@ class pyinstaller(Command):
     description = """Run PyInstaller to compile standalone binary executables"""
 
     user_options = [
-        ("pyinstaller-path=", None, "path to pyinstaller executable")
+        ("pyinstaller=", None, "path to pyinstaller executable"),
+        ("name", None, "name of the bundled app")
     ]
 
     def initialize_options(self):
         self.pyinstaller_path = None
-        self.pyinstaller_options = None
-
-    def get_pyinstaller_bin(self):
-        """Return path to pyinstaller executable"""
-        pi = 'pyinstaller'
-        if self.pyinstaller_path:
-            pi = os.path.join(self.pyinstaller_path, pi)
-        return pi
+        self.name = None
+        self.pyinstaller_opts = None
 
     def default_pyinstaller_opts(self):
         """Return default options for PyInstaller.
@@ -42,13 +37,16 @@ class pyinstaller(Command):
     def finalize_options(self):
         if self.pyinstaller_path:
             self.pyinstaller_path = os.path.abspath(self.pyinstaller_path)
-            if not os.path.exists(self.get_pyinstaller_bin()):
-                raise DistutilsOptionError("failed to find pyinstaller in %s" % self.pyinstaller_path)
-        self.pyinstaller_options = self._default_pyinstaller_opts()
+            if not os.path.exists(self.pyinstaller_path):
+                raise DistutilsOptionError("failed to find pyinstaller from %s" % self.pyinstaller_path)
+        self.pyinstaller_opts = self.default_pyinstaller_opts()
+        if not self.name:
+            self.name = self.distribution.meta_data.get_name()
+        self.pyinstaller_opts.append('--name=%s' % self.name)
 
     def run(self):
-        pi = self._get_pyinstaller_bin()
-        opts = self.pyinstaller_options
+        pi = self.pyinstaller_path
+        opts = self.pyinstaller_opts
         self.announce("running %s %s" % (pi, ' '.join(opts)))
         code = subprocess.call(pi, opts)
         return code
@@ -56,18 +54,19 @@ class pyinstaller(Command):
 class clean_all(clean.clean_all):
     """Distutils command to clean all temporary files, compiled Python files, PyInstaller temp files and spec."""
 
+    user_options = [
+        ("name", None, "name of the bundled app")
+    ]
+
     def initialize_options(self):
         clean.clean_all.initialize_options(self)
-        self.spec_file = None
+        self.name = None
 
     def finalize_options(self):
         clean.clean_all.finalize_options(self)
-        if not self.spec_file:
-            self.spec_file = "%s.spec" % self.distribution.metadata.get_name()
+        if not self.name:
+            self.name = self.distribution.meta_data.get_name()
 
-    def clean_spec(self):
-        self._clean_file(self.spec_file)
-
-    def run(self):
-        clean.clean_all.run(self)
-        self.clean_spec()
+    def get_extra_paths(self):
+        """Return list of extra files/directories to be removed"""
+        return ["%s.spec" % self.name]
