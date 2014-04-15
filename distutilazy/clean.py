@@ -4,7 +4,7 @@ distutility.clean
 commands to help clean files
 """
 
-version = '0.1.1'
+version = '0.2.0'
 
 import os
 import shutil
@@ -63,8 +63,8 @@ class clean_all(clean.clean, clean_pyc):
     def get_egg_info_dir(self):
         return "%s.egg-info" % self.distribution.metadata.get_name()
 
-    def clean_egg_info(self):
-        dirname = self.get_egg_info_dir()
+    def _clean_dir(self, dirname):
+        """Clean a directory if exists"""
         if not os.path.exists(dirname):
             log.warn("'%s' does not exist -- can't clean it" % dirname)
             return
@@ -72,17 +72,19 @@ class clean_all(clean.clean, clean_pyc):
         if not self.dry_run:
             shutil.rmtree(dirname, True)
 
+    def clean_egg_info(self):
+        dirname = os.path.join(self.root, self.get_egg_info_dir())
+        self._clean_dir(dirname)
+
     def clean_dist(self):
-        dirname = 'dist'
-        if not os.path.exists(dirname):
-            log.warn("'%s' does not exist -- can't clean it" % dirname)
-            return
-        self.announce("cleaning %s" % dirname)
-        if not self.dry_run:
-            shutil.rmtree(dirname, True)
+        self._clean_dir(os.path.join(self.root, 'dist'))
+
+    def clean_build(self):
+        self._clean_dir(os.path.join(self.root, 'build'))
 
     def run(self):
         clean.clean.run(self)
         clean_pyc.run(self)
         self.clean_egg_info()
         self.clean_dist()
+        self.clean_build()
