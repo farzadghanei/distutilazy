@@ -6,7 +6,7 @@ test_clean
 unittesting for clean module
 """
 
-__version__ = "0.1.2"
+__version__ = "0.2.0"
 
 import sys
 import os
@@ -24,7 +24,25 @@ class TestCommon(unittest.TestCase):
         cl = clean.clean_all(dist)
         cl.initialize_options()
         cl.finalize_options()
-        self.assertEquals(cl.get_egg_info_dir(), 'testdist.egg-info')
+        self.assertEquals(cl.get_egginfo_dir(), 'testdist.egg-info')
+        targets = ['build', 'dist', 'egginfo', 'extra']
+        bad_calls = []
+        good_calls = []
+        good_calls_should_be = 0
+        for target in targets:
+            cl = clean.clean_all(dist)
+            cl.initialize_options()
+            cl.finalize_options()
+            cl.dry_run = True
+            setattr(cl, 'keep_%s' % target, True)
+            setattr(cl, 'clean_%s' % target, lambda self: bad_calls.append(targt))
+            other_targets = [t for t in targets if t != target]
+            for ot in other_targets:
+                good_calls_should_be += 1
+                setattr(cl, 'clean_%s' % ot, lambda self=None: good_calls.append(ot))
+            cl.run()
+        self.assertEquals(bad_calls, [])
+        self.assertEquals(len(good_calls), good_calls_should_be)
 
     def test_clean_pyc(self):
         dist = Distribution()

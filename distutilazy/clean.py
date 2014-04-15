@@ -4,7 +4,7 @@ distutility.clean
 commands to help clean files
 """
 
-version = '0.2.1'
+version = '0.2.3'
 
 import os
 import shutil
@@ -58,17 +58,29 @@ class clean_pyc(Command):
 
 class clean_all(clean.clean, clean_pyc):
     description = """Clean root dir from temporary files, complied files, etc."""
+    user_options = [
+        ("keep-build", None, "do not clean build direcotry"),
+        ("keep-dist", None, "do not clean dist direcotry"),
+        ("keep-egginfo", None, "do not clean egg info direcotry"),
+        ("keep-extra", None, "do not clean extra files"),
+    ]
+
+    boolean_options = ['keep-build', 'keep-dist', 'keep-egginfo', 'keep-extra']
 
     def initialize_options(self):
         clean.clean.initialize_options(self)
         clean_pyc.initialize_options(self)
+        self.keep_build = None
+        self.keep_dist = None
+        self.keep_egginfo = None
+        self.keep_extra = None
 
     def finalize_options(self):
         clean.clean.finalize_options(self)
-        self.all = True
         clean_pyc.finalize_options(self)
+        self.all = True
 
-    def get_egg_info_dir(self):
+    def get_egginfo_dir(self):
         return "%s.egg-info" % self.distribution.metadata.get_name()
 
     def _clean_dir(self, dirname):
@@ -80,8 +92,13 @@ class clean_all(clean.clean, clean_pyc):
         if not self.dry_run:
             shutil.rmtree(dirname, True)
 
-    def clean_egg_info(self):
-        dirname = os.path.join(self.root, self.get_egg_info_dir())
+    def get_extra_paths(self):
+        """Return list of extra files/directories to be removed"""
+        return []
+
+    def clean_egginfo(self):
+        """Clean .egginfo directory"""
+        dirname = os.path.join(self.root, self.get_egginfo_dir())
         self._clean_dir(dirname)
 
     def clean_dist(self):
@@ -90,9 +107,26 @@ class clean_all(clean.clean, clean_pyc):
     def clean_build(self):
         self._clean_dir(os.path.join(self.root, 'build'))
 
+    def clean_extra(self):
+        """Clean extra files/directories specified by get_extra_paths()"""
+        extra_paths = self.get_extra_paths()
+        for path in extra_paths:
+            if not os.path.exists(path):
+                log.warn("'%s' does not exist -- can't clean it" % path)
+                continue
+            if os.path.isdir(path):
+                self._clean_dir(path)
+            else:
+                self._clean_file(path)
+
     def run(self):
         clean.clean.run(self)
         clean_pyc.run(self)
-        self.clean_egg_info()
-        self.clean_dist()
-        self.clean_build()
+        if not self.keep_build:
+            self.clean_build()
+        if not self.keep_egginfo:
+            self.clean_egginfo()
+        if not self.keep_dist:
+            self.clean_dist()
+        if not self.keep_extra:
+            self.clean_extra()
