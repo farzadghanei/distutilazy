@@ -22,7 +22,6 @@ class TestCommon(unittest.TestCase):
         dist = Distribution()
         dist.metadata.name = 'testdist'
         cl = clean.clean_all(dist)
-        cl.initialize_options()
         cl.finalize_options()
         self.assertEquals(cl.get_egginfo_dir(), 'testdist.egg-info')
         targets = ['build', 'dist', 'egginfo', 'extra']
@@ -31,7 +30,6 @@ class TestCommon(unittest.TestCase):
         good_calls_should_be = 0
         for target in targets:
             cl = clean.clean_all(dist)
-            cl.initialize_options()
             cl.finalize_options()
             cl.dry_run = True
             setattr(cl, 'keep_%s' % target, True)
@@ -47,7 +45,6 @@ class TestCommon(unittest.TestCase):
     def test_clean_pyc(self):
         dist = Distribution()
         cl = clean.clean_pyc(dist)
-        cl.initialize_options()
         cl.extensions = 'ppyycc, ppyyoo'
         cl.finalize_options()
         self.assertEquals(cl.extensions, ['ppyycc', 'ppyyoo'])
