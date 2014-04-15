@@ -6,7 +6,7 @@ test_clean
 unittesting for pyinstaller module
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 import sys
 import os
@@ -18,6 +18,13 @@ from distutilazy import pyinstaller
 from distutils.dist import Distribution
 
 class TestCommon(unittest.TestCase):
+
+    def test_finalize_opts(self):
+        dist = Distribution()
+        pi = pyinstaller.pyinstaller(dist)
+        pi.finalize_options()
+        self.assertTrue( re.match('.+', pi.name) )
+        self.assertTrue(pi.pyinstaller_opts)
 
     def test_clean_all(self):
         dist = Distribution()
