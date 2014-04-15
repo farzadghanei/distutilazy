@@ -41,7 +41,7 @@ class pyinstaller(Command):
                 raise DistutilsOptionError("failed to find pyinstaller from %s" % self.pyinstaller_path)
         self.pyinstaller_opts = self.default_pyinstaller_opts()
         if not self.name:
-            self.name = self.distribution.meta_data.get_name()
+            self.name = self.distribution.metadata.get_name()
         self.pyinstaller_opts.append('--name=%s' % self.name)
 
     def run(self):
@@ -55,7 +55,11 @@ class clean_all(clean.clean_all):
     """Distutils command to clean all temporary files, compiled Python files, PyInstaller temp files and spec."""
 
     user_options = [
-        ("name", None, "name of the bundled app")
+        ("keep-build", None, "do not clean build direcotry"),
+        ("keep-dist", None, "do not clean dist direcotry"),
+        ("keep-egginfo", None, "do not clean egg info direcotry"),
+        ("keep-extra", None, "do not clean extra files"),
+        ("name", None, "name of the bundled app"),
     ]
 
     def initialize_options(self):
@@ -65,7 +69,7 @@ class clean_all(clean.clean_all):
     def finalize_options(self):
         clean.clean_all.finalize_options(self)
         if not self.name:
-            self.name = self.distribution.meta_data.get_name()
+            self.name = self.distribution.metadata.get_name()
 
     def get_extra_paths(self):
         """Return list of extra files/directories to be removed"""
