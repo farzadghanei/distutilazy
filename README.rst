@@ -1,13 +1,14 @@
 Distutilazy
-~~~~~~~~~~~
+===========
 
 Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
  - clean_all: using distutils.clean and clean_pyc to clean all temporary files
+ - pyinstaller: convinient calls for PyInstaller_ with sane defaults (no direct command)
 
 How
-~~~
+---
 Make sure distutilazy package is in sys.path, then add ``distutilazy.command`` package to the list of command packages in your ``setup.cfg`` file.
 
 ::
@@ -36,3 +37,5 @@ The modules should be imported in setup.py, then desired classes might be assign
         cmdclass: {'clean_pyc': distutilazy.clean.clean_pyc}
     )
 
+
+.. _PyInstaller: http://www.pyinstaller.org
