@@ -22,6 +22,7 @@ class TestCommon(unittest.TestCase):
     def test_finalize_opts(self):
         dist = Distribution()
         pi = pyinstaller.pyinstaller(dist)
+        pi.target = 'fake.py'
         pi.finalize_options()
         self.assertTrue( re.match('.+', pi.name) )
         self.assertTrue(pi.pyinstaller_opts)
