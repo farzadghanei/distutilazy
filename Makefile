@@ -4,10 +4,10 @@
 all: sdist
 
 clean:
-	python setup.py clean_all -a
+	python setup.py clean_all
 
 clean_pyc:
-	python setup.py clean_pyc -a
+	python setup.py clean_pyc
 
 test:
 	python setup.py test
