@@ -5,7 +5,7 @@ Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
  - clean_all: using distutils.clean and clean_pyc to clean all temporary files
- - pyinstaller: convinient calls for PyInstaller_ with sane defaults (no direct command)
+ - pyinstaller: convinient calls for PyInstaller_ with sane defaults
 
 How
 ---
