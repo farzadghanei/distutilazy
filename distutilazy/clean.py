@@ -4,7 +4,7 @@ distutility.clean
 commands to help clean files
 """
 
-version = '0.2.0'
+version = '0.2.1'
 
 import os
 import shutil
@@ -40,13 +40,21 @@ class clean_pyc(Command):
         self.announce("found %d compiled python files in %s" % (len(files), self.root))
         return files
 
+    def _clean_file(self, filename):
+        """Clean a file if exists"""
+        if not os.path.exists(filename):
+            log.warn("'%s' does not exist -- can't clean it" % filename)
+            return
+        self.announce("removing %s" % filename)
+        if not self.dry_run:
+            os.remove(filename)
+
     def run(self):
         files = self.find_compiled_files()
         self.announce("cleaning compiled python files in %s ..." % self.root)
         if not self.dry_run:
-            for file_ in files:
-                log.debug("removing %s " % file_)
-                os.remove(file_)
+            for filename in files:
+                self._clean_file(filename)
 
 class clean_all(clean.clean, clean_pyc):
     description = """Clean root dir from temporary files, complied files, etc."""
