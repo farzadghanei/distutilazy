@@ -4,9 +4,10 @@ distutility.pyinstaller
 helper commands for using pyinstaller
 """
 
-version = '0.1.0'
+version = '0.1.3'
 
 import os
+import platform
 from distutils.core import Command
 from distutils.errors import DistutilsOptionError
 import clean
@@ -20,25 +21,21 @@ class pyinstaller(Command):
         ("target=", None, "Taget Python app to bundle"),
         ("pyinstaller=", None, "Path to pyinstaller executable"),
         ("name=", "n", "Name of the bundled app"),
-        ("one-file", "F", "Create a one-file bundled executable"),
         ("icon=", "i", "Path to icon resource"),
-        ("windowed=", "w", "Windowed app, no console for stdio"),
-        ("clean", None, "Clean cache and remove temp files before build"),
-        ("strip", "s", "Strip the symbol-table"),
+        ("windowed", "w", "Windowed app, no console for stdio"),
+        ("clean", None, "Clean cached and temp files before build"),
     ]
 
-    boolean_options = ["one-file", "windowed", "clean", "strip"]
+    boolean_options = ["windowed", "clean"]
 
     def initialize_options(self):
         self.target = None
         self.pyinstaller_path = None
         self.pyinstaller_opts = None
         self.name = None
-        self.one_file = None
         self.icon = None
         self.windowed = None
         self.clean = None
-        self.strip = None
 
     def default_pyinstaller_opts(self):
         """Return default options for PyInstaller.
@@ -46,7 +43,7 @@ class pyinstaller(Command):
 
         :return: list of options
         """
-        return []
+        return ['--one-file']
 
     def finalize_options(self):
         if self.pyinstaller_path:
@@ -56,17 +53,15 @@ class pyinstaller(Command):
         self.pyinstaller_opts = self.default_pyinstaller_opts()
         if not self.name:
             self.name = self.distribution.metadata.get_name()
-        if self.one_file:
-            self.pyinstaller_opts.append('--one-file')
-        if self.strip:
-            self.pyinstaller_opts.append('--strip')
         if self.clean:
             self.pyinstaller_opts.append('--clean')
         if self.windowed:
             self.pyinstaller_opts.append('--windowed')
         if self.icon:
-            self.pyinstaller_opts.append('--icon=%s' % self.icon)
-        self.pyinstaller_opts.append('--name=%s' % self.name)
+            self.pyinstaller_opts.append("--icon='%s'" % self.icon)
+        if platform.system().upper() != 'WINDWOWS':
+            self.pyinstaller_opts.append('--strip')
+        self.pyinstaller_opts.append("--name='%s'" % self.name)
 
     def run(self):
         if not self.target:
