@@ -5,7 +5,7 @@ Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
  - clean_all: using distutils.clean and clean_pyc to clean all temporary files
- - pyinstaller: convinient calls for PyInstaller_ with sane defaults
+ - pyinstaller: convinient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
 
 How
 ---
@@ -37,5 +37,6 @@ The modules should be imported in setup.py, then desired classes might be assign
         cmdclass: {'clean_pyc': distutilazy.clean.clean_pyc}
     )
 
-
-.. _PyInstaller: http://www.pyinstaller.org
+License
+-------
+Distutilazy is released under the temrs of `MIT license <http://opensource.org/licenses/MIT>`_.
