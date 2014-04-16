@@ -13,30 +13,39 @@ from distutils.core import Command
 from distutils.errors import DistutilsOptionError
 import clean
 
+is_windows = platform.system().upper() == 'WINDWOWS'
+path_separator = is_windows and ';' or ':'
+
 class pyinstaller(Command):
     """Distutils command to run PyInstaller with configured defaults"""
 
     description = """Run PyInstaller to compile standalone binary executables"""
 
     user_options = [
-        ("target=", None, "Taget Python app to bundle"),
+        ("target=", 't', "Taget Python app to bundle"),
         ("pyinstaller=", None, "Path to pyinstaller executable"),
         ("name=", "n", "Name of the bundled app"),
         ("icon=", "i", "Path to icon resource"),
         ("windowed", "w", "Windowed app, no console for stdio"),
         ("clean", None, "Clean cached and temp files before build"),
+        ("hidden-imports=", 'I', "comma separated list of extra modules to be imported"),
+        ("paths=", 'p', "extra paths to search for modules separated by '%s'" % path_separator),
     ]
 
     boolean_options = ["windowed", "clean"]
 
     def initialize_options(self):
+        self.pyinstaller_opts = []
+        self.imports = []
+        self.syspaths = []
         self.target = None
         self.pyinstaller_path = None
-        self.pyinstaller_opts = []
         self.name = None
         self.icon = None
         self.windowed = None
         self.clean = None
+        self.hidden_imports = None
+        self.paths = None
 
     def default_pyinstaller_opts(self):
         """Return default options for PyInstaller.
@@ -45,6 +54,22 @@ class pyinstaller(Command):
         :return: list of options
         """
         return ['--onefile']
+
+    def default_imports(self):
+        """Return list of explicit imports.
+        Use this method to customize the extra modules for separate projects
+
+        :return: list of module names to be imported
+        """
+        return []
+
+    def default_paths(self):
+        """Return list of paths to append to sys.path while importing modules.
+        Use this method to customize the extra paths for separate projects
+
+        :return: list of paths
+        """
+        return []
 
     def finalize_options(self):
         if self.pyinstaller_path:
@@ -60,8 +85,20 @@ class pyinstaller(Command):
             self.pyinstaller_opts.append('--windowed')
         if self.icon:
             self.pyinstaller_opts.append("--icon=%s" % self.icon)
-        if platform.system().upper() != 'WINDWOWS':
+        if not is_windows:
             self.pyinstaller_opts.append('--strip')
+
+        self.imports.extend( self.default_imports() )
+        if self.hidden_imports:
+            self.imports.extend( [ i.strip() for i in self.hidden_imports.split(',') if i.strip()] )
+        for mod in self.imports:
+            self.pyinstaller_opts.append("--hidden-import=%s" % mod)
+
+        self.syspaths.extend( self.default_paths() )
+        if self.paths:
+            self.syspaths.extend( [p for p in self.paths.split(path_separator)] )
+        for path in self.syspaths:
+            self.pyinstaller_opts.append("--paths=%s" % path)
         self.pyinstaller_opts.append("--name=%s" % self.name)
 
     def run(self):
