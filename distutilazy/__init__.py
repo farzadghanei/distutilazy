@@ -7,7 +7,7 @@ Extra distutil command classes
 import os
 import sys
 
-version = '0.0.3'
+version = '0.0.4'
 all = ['clean', 'pyinstaller', 'command']
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))

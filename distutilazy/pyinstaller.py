@@ -4,7 +4,7 @@ distutility.pyinstaller
 helper commands for using pyinstaller
 """
 
-version = '0.1.3'
+version = '0.1.4'
 
 import os
 import platform
@@ -13,7 +13,7 @@ from distutils.core import Command
 from distutils.errors import DistutilsOptionError
 import clean
 
-is_windows = platform.system().upper() == 'WINDWOWS'
+is_windows = platform.system().upper() == 'WINDOWS'
 path_separator = is_windows and ';' or ':'
 
 class pyinstaller(Command):
@@ -76,7 +76,7 @@ class pyinstaller(Command):
             self.pyinstaller_path = os.path.abspath(self.pyinstaller_path)
             if not os.path.exists(self.pyinstaller_path):
                 raise DistutilsOptionError("failed to find pyinstaller from %s" % self.pyinstaller_path)
-        self.pyinstaller_opts = self.default_pyinstaller_opts()
+        self.pyinstaller_opts.extend( self.default_pyinstaller_opts() )
         if not self.name:
             self.name = self.distribution.metadata.get_name()
         if self.clean:
