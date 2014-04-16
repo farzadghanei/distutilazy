@@ -8,6 +8,7 @@ version = '0.1.3'
 
 import os
 import platform
+import subprocess
 from distutils.core import Command
 from distutils.errors import DistutilsOptionError
 import clean
@@ -31,7 +32,7 @@ class pyinstaller(Command):
     def initialize_options(self):
         self.target = None
         self.pyinstaller_path = None
-        self.pyinstaller_opts = None
+        self.pyinstaller_opts = []
         self.name = None
         self.icon = None
         self.windowed = None
@@ -43,7 +44,7 @@ class pyinstaller(Command):
 
         :return: list of options
         """
-        return ['--one-file']
+        return ['--onefile']
 
     def finalize_options(self):
         if self.pyinstaller_path:
@@ -58,18 +59,20 @@ class pyinstaller(Command):
         if self.windowed:
             self.pyinstaller_opts.append('--windowed')
         if self.icon:
-            self.pyinstaller_opts.append("--icon='%s'" % self.icon)
+            self.pyinstaller_opts.append("--icon=%s" % self.icon)
         if platform.system().upper() != 'WINDWOWS':
             self.pyinstaller_opts.append('--strip')
-        self.pyinstaller_opts.append("--name='%s'" % self.name)
+        self.pyinstaller_opts.append("--name=%s" % self.name)
 
     def run(self):
         if not self.target:
             raise DistutilsOptionError("no target app is specified to bundle")
-        pi = self.pyinstaller_path
-        opts = self.pyinstaller_opts + self.target
-        self.announce("running %s %s" % (pi, ' '.join(opts)))
-        code = subprocess.call(pi, opts)
+        pi = self.pyinstaller_path or 'pyinstaller'
+        args = self.pyinstaller_opts
+        args.append(self.target)
+        args.insert(0, pi)
+        self.announce("running %s" % ' '.join(args))
+        code = subprocess.call(args)
         return code
 
 class clean_all(clean.clean_all):
