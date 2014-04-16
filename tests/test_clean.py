@@ -16,7 +16,7 @@ from setup_test_env import *
 from distutilazy import clean
 from distutils.dist import Distribution
 
-class TestCommon(unittest.TestCase):
+class TestClean(unittest.TestCase):
 
     def test_clean_all(self):
         dist = Distribution()

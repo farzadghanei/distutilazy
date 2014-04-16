@@ -15,7 +15,7 @@ import unittest
 from setup_test_env import *
 from distutilazy import util
 
-class TestCommon(unittest.TestCase):
+class TestUtil(unittest.TestCase):
 
     def test_util_find_files(self):
         me = os.path.realpath(__file__)

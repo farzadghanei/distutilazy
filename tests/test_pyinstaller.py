@@ -17,7 +17,7 @@ from setup_test_env import *
 from distutilazy import pyinstaller
 from distutils.dist import Distribution
 
-class TestCommon(unittest.TestCase):
+class TestPyinstaller(unittest.TestCase):
 
     def test_finalize_opts(self):
         dist = Distribution()
