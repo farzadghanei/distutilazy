@@ -1,7 +1,11 @@
 """
-distutility.command.pyinstaller
 
-command to call pyinstaller
+    distutilazy.command.pyinstaller
+    -------------------------------
+
+    Command to call pyinstaller
+
+    :license: MIT, see LICENSE for more details.
 """
 
 import os

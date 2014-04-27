@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 """
+
 distutilazy
 ===========
 
@@ -9,6 +10,7 @@ Extra distutils commands.
 License
 -------
 Distutilazy is released under the terms of `MIT license <http://opensource.org/licenses/MIT>`_.
+
 """
 
 import os
@@ -38,14 +40,13 @@ CLASSIFIERS = [
 ]
 
 long_description = __doc__
-# read long description
 with open(os.path.join(os.path.dirname(__file__), "README.rst")) as fh:
     long_description = fh.read()
 
 params = dict(
     name = "distutilazy",
     author = "Farzad Ghanei",
-    home_page = "http://github.com/farzadghanei/distutilazy/",
+    url = "http://github.com/farzadghanei/distutilazy/",
     packages = setuptools and find_packages() or ["distutilazy", "tests"],
     version = distutilazy.version,
     description = "Extra distutils commands",
@@ -57,7 +58,7 @@ params = dict(
 
 if setuptools:
     params.update(
-        zip_safe = True,
+        zip_safe = False,
         test_suite = "tests",
     )
 

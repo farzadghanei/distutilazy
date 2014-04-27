@@ -1,7 +1,7 @@
-.PHONY: all build test clean clean_pyc
+.PHONY: all build test clean clean_pyc sdist install
 .SILENT: test
 
-all: sdist
+all: build
 
 clean:
 	python setup.py clean_all

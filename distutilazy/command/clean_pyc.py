@@ -1,7 +1,11 @@
 """
-distutility.command.clean_pyc
 
-command to clean compile python files
+    distutilazy.command.clean_pyc
+    -----------------------------
+
+    Command to clean compiled python files
+
+    :license: MIT, see LICENSE for more details.
 """
 
 import os

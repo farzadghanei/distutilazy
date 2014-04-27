@@ -1,11 +1,17 @@
 """
-distutility
 
-Extra distutility commands
+    distutilazy.command
+    -----------
+
+    Extra commands for setup.py using classes provided by distutilazy
+
+    :license: MIT, see LICENSE for more details.
 """
 
 import os
 import sys
+
+__all__ = ["clean_pyc", "clean_all", "pyinstaller"]
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 if not base_dir in sys.path:
@@ -14,5 +20,4 @@ if not base_dir in sys.path:
     else:
         sys.path.append(base_dir)
 
-all = ['clean_pyc', 'clean_all', 'pyinstaller']
 

@@ -1,10 +1,15 @@
 """
-distutility.clean
 
-commands to help clean files
+    distutilazy.clean
+    -----------------
+
+    command classes to help clean temporary files
+
+    :license: MIT, see LICENSE for more details.
+
 """
 
-version = '0.2.3'
+__version__ = "0.2.4"
 
 import os
 import shutil
@@ -19,7 +24,7 @@ class clean_pyc(Command):
 
     def initialize_options(self):
         self.root = os.getcwd()
-        self.extensions = 'pyc,pyo,pyd'
+        self.extensions = "pyc,pyo,pyd"
 
     def finalize_options(self):
         if not os.path.exists(self.root):
@@ -65,7 +70,7 @@ class clean_all(clean.clean, clean_pyc):
         ("keep-extra", None, "do not clean extra files"),
     ]
 
-    boolean_options = ['keep-build', 'keep-dist', 'keep-egginfo', 'keep-extra']
+    boolean_options = ["keep-build", "keep-dist", "keep-egginfo", "keep-extra"]
 
     def initialize_options(self):
         clean.clean.initialize_options(self)
@@ -102,10 +107,10 @@ class clean_all(clean.clean, clean_pyc):
         self._clean_dir(dirname)
 
     def clean_dist(self):
-        self._clean_dir(os.path.join(self.root, 'dist'))
+        self._clean_dir(os.path.join(self.root, "dist"))
 
     def clean_build(self):
-        self._clean_dir(os.path.join(self.root, 'build'))
+        self._clean_dir(os.path.join(self.root, "build"))
 
     def clean_extra(self):
         """Clean extra files/directories specified by get_extra_paths()"""

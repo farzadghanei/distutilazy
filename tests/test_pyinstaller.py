@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 """
-test_clean
+    distutilazy.tests.test_pyinstaller
+    ----------------------------------
 
-unittesting for pyinstaller module
+    Tests for distutilazy.pyinstaller module.
+
+    :license: MIT, see LICENSE for more details.
 """
 
 __version__ = "0.1.1"
@@ -22,9 +25,9 @@ class TestPyinstaller(unittest.TestCase):
     def test_finalize_opts(self):
         dist = Distribution()
         pi = pyinstaller.pyinstaller(dist)
-        pi.target = 'fake.py'
+        pi.target = "fake.py"
         pi.finalize_options()
-        self.assertTrue( re.match('.+', pi.name) )
+        self.assertTrue( re.match(".+", pi.name) )
         self.assertTrue(pi.pyinstaller_opts)
 
     def test_clean_all(self):
@@ -34,7 +37,7 @@ class TestPyinstaller(unittest.TestCase):
         paths = cl.get_extra_paths()
         self.assertTrue(paths)
         spec = paths.pop()
-        self.assertTrue( re.match('\S+\.spec', spec) )
+        self.assertTrue( re.match("\S+\.spec", spec) )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

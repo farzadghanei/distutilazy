@@ -1,10 +1,14 @@
 """
-distutility.pyinstaller
 
-helper commands for using pyinstaller
+    distutilazy.pyinstaller
+    -----------------------
+
+    command classes to call pyinstaller
+
+    :license: MIT, see LICENSE for more details.
 """
 
-version = '0.1.4'
+__version__ = "0.1.5"
 
 import os
 import platform
@@ -13,7 +17,7 @@ from distutils.core import Command
 from distutils.errors import DistutilsOptionError
 import clean
 
-is_windows = platform.system().upper() == 'WINDOWS'
+is_windows = platform.system().upper() == "WINDOWS"
 path_separator = is_windows and ';' or ':'
 
 class pyinstaller(Command):
@@ -24,9 +28,9 @@ class pyinstaller(Command):
     user_options = [
         ("target=", 't', "Taget Python app to bundle"),
         ("pyinstaller=", None, "Path to pyinstaller executable"),
-        ("name=", "n", "Name of the bundled app"),
-        ("icon=", "i", "Path to icon resource"),
-        ("windowed", "w", "Windowed app, no console for stdio"),
+        ("name=", 'n', "Name of the bundled app"),
+        ("icon=", 'i', "Path to icon resource"),
+        ("windowed", 'w', "Windowed app, no console for stdio"),
         ("clean", None, "Clean cached and temp files before build"),
         ("hidden-imports=", 'I', "comma separated list of extra modules to be imported"),
         ("paths=", 'p', "extra paths to search for modules separated by '%s'" % path_separator),
@@ -53,7 +57,7 @@ class pyinstaller(Command):
 
         :return: list of options
         """
-        return ['--onefile']
+        return ["--onefile"]
 
     def default_imports(self):
         """Return list of explicit imports.
@@ -80,13 +84,13 @@ class pyinstaller(Command):
         if not self.name:
             self.name = self.distribution.metadata.get_name()
         if self.clean:
-            self.pyinstaller_opts.append('--clean')
+            self.pyinstaller_opts.append("--clean")
         if self.windowed:
-            self.pyinstaller_opts.append('--windowed')
+            self.pyinstaller_opts.append("--windowed")
         if self.icon:
             self.pyinstaller_opts.append("--icon=%s" % self.icon)
         if not is_windows:
-            self.pyinstaller_opts.append('--strip')
+            self.pyinstaller_opts.append("--strip")
 
         self.imports.extend( self.default_imports() )
         if self.hidden_imports:
@@ -104,7 +108,7 @@ class pyinstaller(Command):
     def run(self):
         if not self.target:
             raise DistutilsOptionError("no target app is specified to bundle")
-        pi = self.pyinstaller_path or 'pyinstaller'
+        pi = self.pyinstaller_path or "pyinstaller"
         args = self.pyinstaller_opts
         args.append(self.target)
         args.insert(0, pi)

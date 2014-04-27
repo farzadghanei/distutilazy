@@ -1,7 +1,10 @@
 """
-distutility.command.clean_all
+    distutilazy.command.clean_all
+    -----------------------------
 
-command to clean all temporary files
+    Command to clean all temporary files
+
+    :license: MIT, see LICENSE for more details.
 """
 
 import os

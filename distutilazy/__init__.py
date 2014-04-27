@@ -1,14 +1,17 @@
 """
-distutilazy
+    distutilazy
+    -----------
 
-Extra distutil command classes
+    Extra distutils command classes.
+
+    :license: MIT, see LICENSE for more details.
 """
 
 import os
 import sys
 
-version = '0.0.4'
-all = ['clean', 'pyinstaller', 'command']
+__version__ = '0.0.5'
+__all__ = ['clean', 'pyinstaller', 'command']
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 if not base_dir in sys.path:

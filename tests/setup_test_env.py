@@ -1,5 +1,11 @@
 """
-Sets up the test environment and provides methods to access the test data
+
+    distutilazy.tests.setup_test_env
+    -----------------
+
+    Sets up the test environment and provides methods to access the test data
+
+    :license: MIT, see LICENSE for more details.
 
 """
 
