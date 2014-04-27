@@ -21,34 +21,34 @@ import distutilazy
 import distutilazy.clean
 
 CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: MIT License',
-    'Operating System :: POSIX',
-    'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Windows',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.6',
-    'Programming Language :: Python :: 2.7',
-    'Topic :: Software Development :: Libraries :: Python Modules',
-    'Topic :: System :: Archiving :: Packaging',
-    'Topic :: System :: Systems Administration',
-    'Topic :: Utilities'
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.6",
+    "Programming Language :: Python :: 2.7",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Archiving :: Packaging",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities"
 ]
 
 long_description = "Extra distutils commands"
 # read long description
-with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as fh:
+with open(os.path.join(os.path.dirname(__file__), "README.rst")) as fh:
     long_description = fh.read()
 
 params = dict(
-    name = 'distutilazy',
-    packages = setuptools and find_packages() or ['distutilazy', 'tests'],
+    name = "distutilazy",
+    packages = setuptools and find_packages() or ["distutilazy", "tests"],
     version = distutilazy.version,
     description = "Extra distutils commands",
     long_description = long_description,
-    license = 'MIT',
+    license = "MIT",
     classifiers = CLASSIFIERS,
     cmdclass = {"clean_pyc": distutilazy.clean.clean_pyc, "clean_all": distutilazy.clean.clean_all}
 )
@@ -56,7 +56,7 @@ params = dict(
 if setuptools:
     params.update(
         zip_safe = True,
-        test_suite = 'tests',
+        test_suite = "tests",
     )
 
 dist = setup(**params)
