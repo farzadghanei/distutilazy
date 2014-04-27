@@ -46,6 +46,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.rst")) as fh:
 params = dict(
     name = "distutilazy",
     author = "Farzad Ghanei",
+    author_email = "farzad@ghanei.net",
     url = "http://github.com/farzadghanei/distutilazy/",
     packages = setuptools and find_packages() or ["distutilazy", "tests"],
     version = distutilazy.__version__,
