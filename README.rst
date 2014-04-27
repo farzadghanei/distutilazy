@@ -39,4 +39,4 @@ The modules should be imported in setup.py, then desired classes might be assign
 
 License
 -------
-Distutilazy is released under the temrs of `MIT license <http://opensource.org/licenses/MIT>`_.
+Distutilazy is released under the terms of `MIT license <http://opensource.org/licenses/MIT>`_.
