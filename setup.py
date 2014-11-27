@@ -12,15 +12,15 @@ License
 Distutilazy is released under the terms of `MIT license <http://opensource.org/licenses/MIT>`_.
 
 """
-
+from __future__ import print_function
 import os
 import sys
 
 try:
     import setuptools
     from setuptools import setup, find_packages
-except ImportError:
-    print >> sys.strerr, "using distutils. install setuptools for more options"
+except ImportError as exp:
+    print("using distutils. install setuptools for more options", file=sys.stderr)
     setuptools = None
     from distutils.core import setup
 
