@@ -8,14 +8,17 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__version__ = "0.1.5"
+from __future__ import absolute_import
 
 import os
 import platform
 import subprocess
 from distutils.core import Command
 from distutils.errors import DistutilsOptionError
-import clean
+
+from . import clean
+
+__version__ = "0.2.0"
 
 is_windows = platform.system().upper() == "WINDOWS"
 path_separator = is_windows and ';' or ':'

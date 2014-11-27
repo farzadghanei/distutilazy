@@ -9,14 +9,17 @@
 
 """
 
-__version__ = "0.2.4"
+from __future__ import absolute_import
 
 import os
 import shutil
 from distutils import log
 from distutils.core import Command
 from distutils.command import clean
-import util
+
+from . import util
+
+__version__ = "0.3.0"
 
 class clean_pyc(Command):
     description = """Clean root dir from complied python files"""
