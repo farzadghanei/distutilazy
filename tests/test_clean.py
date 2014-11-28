@@ -9,7 +9,9 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__version__ = "0.2.0"
+from __future__ import absolute_import
+
+__version__ = "0.3.0"
 
 import sys
 import os
@@ -26,7 +28,7 @@ class TestClean(unittest.TestCase):
         dist.metadata.name = "testdist"
         cl = clean.clean_all(dist)
         cl.finalize_options()
-        self.assertEquals(cl.get_egginfo_dir(), "testdist.egg-info")
+        self.assertEqual(cl.get_egginfo_dir(), "testdist.egg-info")
         targets = ["build", "dist", "egginfo", "extra"]
         bad_calls = []
         good_calls = []
@@ -42,16 +44,16 @@ class TestClean(unittest.TestCase):
                 good_calls_should_be += 1
                 setattr(cl, "clean_%s" % ot, lambda self=None: good_calls.append(ot))
             cl.run()
-        self.assertEquals(bad_calls, [])
-        self.assertEquals(len(good_calls), good_calls_should_be)
+        self.assertEqual(bad_calls, [])
+        self.assertEqual(len(good_calls), good_calls_should_be)
 
     def test_clean_pyc(self):
         dist = Distribution()
         cl = clean.clean_pyc(dist)
         cl.extensions = "ppyycc, ppyyoo"
         cl.finalize_options()
-        self.assertEquals(cl.extensions, ["ppyycc", "ppyyoo"])
-        self.assertEquals(cl.find_compiled_files(), [])
+        self.assertEqual(cl.extensions, ["ppyycc", "ppyyoo"])
+        self.assertEqual(cl.find_compiled_files(), [])
 
 if __name__ == "__main__":
     unittest.main()
