@@ -10,7 +10,7 @@ clean_pyc:
 	python setup.py clean_pyc
 
 test:
-	python setup.py test
+	python run-tests.py
 
 sdist:
 	python setup.py sdist
