@@ -118,15 +118,6 @@ class clean_all(clean.clean, clean_pyc):
     def get_egginfo_dir(self):
         return self.distribution.metadata.get_name() + ".egg-info"
 
-    def _clean_dir(self, dirname):
-        """Clean a directory if exists"""
-        if not os.path.exists(dirname):
-            log.warn("'{0}' does not exist -- can't clean it".format(dirname))
-            return
-        self.announce("cleaning " + dirname)
-        if not self.dry_run:
-            shutil.rmtree(dirname, True)
-
     def get_extra_paths(self):
         """Return list of extra files/directories to be removed"""
         return []
@@ -134,13 +125,13 @@ class clean_all(clean.clean, clean_pyc):
     def clean_egginfo(self):
         """Clean .egginfo directory"""
         dirname = os.path.join(self.root, self.get_egginfo_dir())
-        self._clean_dir(dirname)
+        self._clean_directory(dirname)
 
     def clean_dist(self):
-        self._clean_dir(os.path.join(self.root, "dist"))
+        self._clean_directory(os.path.join(self.root, "dist"))
 
     def clean_build(self):
-        self._clean_dir(os.path.join(self.root, "build"))
+        self._clean_directory(os.path.join(self.root, "build"))
 
     def clean_extra(self):
         """Clean extra files/directories specified by get_extra_paths()"""
@@ -150,7 +141,7 @@ class clean_all(clean.clean, clean_pyc):
                 log.warn("'{0}' does not exist -- can't clean it".format(path))
                 continue
             if os.path.isdir(path):
-                self._clean_dir(path)
+                self._clean_directory(path)
             else:
                 self._clean_file(path)
 
