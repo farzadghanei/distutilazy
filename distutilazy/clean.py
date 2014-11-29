@@ -32,7 +32,7 @@ class clean_pyc(Command):
 
     def finalize_options(self):
         if not os.path.exists(self.root):
-            raise IOError("Failed to access root path %s" % self.root)
+            raise IOError("Failed to access root path " + self.root)
         self.extensions = [ext.strip() for ext in self.extensions.split(',')]
         self.directories = [dirname.strip() for dirname in self.directories.split(',')]
 
@@ -43,11 +43,11 @@ class clean_pyc(Command):
         """
         files = []
         for ext in self.extensions:
-            extfiles = util.find_files(self.root, "*.%s" % ext)
-            log.debug("found %d .%s files in %s" % (len(extfiles), ext, self.root))
+            extfiles = util.find_files(self.root, "*." + ext)
+            log.debug("found {0} .{1} files in {2}".format(len(extfiles), ext, self.root))
             files.extend(extfiles)
             del extfiles
-        self.announce("found %d compiled python files in %s" % (len(files), self.root))
+        self.announce("found {0} compiled python files in {1}".format(len(files), self.root))
         return files
 
     def find_cache_directories(self):
@@ -57,15 +57,14 @@ class clean_pyc(Command):
             log.debug("found {0} directories in {1}".format(len(dirs), self.root))
             directories.extend(dirs)
             del dirs
-        self.announce("found {0} python cache directories in %s".format(len(directories), self.root))
+        self.announce("found {0} python cache directories in {1}".format(len(directories), self.root))
         return directories
 
     def _clean_file(self, filename):
         """Clean a file if exists"""
         if not os.path.exists(filename):
-            log.warn("'%s' does not exist -- can't clean it" % filename)
             return
-        self.announce("removing %s" % filename)
+        self.announce("removing " + filename)
         if not self.dry_run:
             os.remove(filename)
 
@@ -73,21 +72,21 @@ class clean_pyc(Command):
         """Clean a directory if exists"""
         if not os.path.exists(dirname):
             return
-        self.announce("removing directory %s and all it's contents" % dirname)
+        self.announce("removing directory {0} and all it's contents".format(dirname))
         if not self.dry_run:
             shutil.rmtree(dirname, True)
 
     def run(self):
         dirs = self.find_cache_directories()
         if dirs:
-            self.announce("cleaning python cache directories in %s ..." % self.root)
+            self.announce("cleaning python cache directories in {0} ...".format(self.root))
             if not self.dry_run:
                 for dirname in dirs:
                     self._clean_directory(dirname)
 
         files = self.find_compiled_files()
         if files:
-            self.announce("cleaning compiled python files in %s ..." % self.root)
+            self.announce("cleaning compiled python files in {0} ...".format(self.root))
             if not self.dry_run:
                 for filename in files:
                     self._clean_file(filename)
@@ -117,14 +116,14 @@ class clean_all(clean.clean, clean_pyc):
         self.all = True
 
     def get_egginfo_dir(self):
-        return "%s.egg-info" % self.distribution.metadata.get_name()
+        return self.distribution.metadata.get_name() + ".egg-info"
 
     def _clean_dir(self, dirname):
         """Clean a directory if exists"""
         if not os.path.exists(dirname):
-            log.warn("'%s' does not exist -- can't clean it" % dirname)
+            log.warn("'{0}' does not exist -- can't clean it".format(dirname))
             return
-        self.announce("cleaning %s" % dirname)
+        self.announce("cleaning " + dirname)
         if not self.dry_run:
             shutil.rmtree(dirname, True)
 
@@ -148,7 +147,7 @@ class clean_all(clean.clean, clean_pyc):
         extra_paths = self.get_extra_paths()
         for path in extra_paths:
             if not os.path.exists(path):
-                log.warn("'%s' does not exist -- can't clean it" % path)
+                log.warn("'{0}' does not exist -- can't clean it".format(path))
                 continue
             if os.path.isdir(path):
                 self._clean_dir(path)
