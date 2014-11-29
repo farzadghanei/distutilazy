@@ -138,7 +138,6 @@ class clean_all(clean.clean, clean_pyc):
         extra_paths = self.get_extra_paths()
         for path in extra_paths:
             if not os.path.exists(path):
-                log.warn("'{0}' does not exist -- can't clean it".format(path))
                 continue
             if os.path.isdir(path):
                 self._clean_directory(path)
