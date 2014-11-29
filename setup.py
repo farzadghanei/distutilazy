@@ -27,6 +27,8 @@ except ImportError as exp:
     if (sys.version_info[0]) < 3:
         print("using distutils. install setuptools for more options", file=sys.stderr)
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import distutilazy
 import distutilazy.clean
 
