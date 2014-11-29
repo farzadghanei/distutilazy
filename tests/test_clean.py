@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
     distutilazy.tests.test_clean
     ----------------------------
@@ -17,7 +15,7 @@ import sys
 import os
 import unittest
 
-from setup_test_env import *
+from .setup_test_env import *
 from distutilazy import clean
 from distutils.dist import Distribution
 
@@ -54,6 +52,3 @@ class TestClean(unittest.TestCase):
         cl.finalize_options()
         self.assertEqual(cl.extensions, ["ppyycc", "ppyyoo"])
         self.assertEqual(cl.find_compiled_files(), [])
-
-if __name__ == "__main__":
-    unittest.main()

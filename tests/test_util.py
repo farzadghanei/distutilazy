@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
     distutilazy.tests.test_util
     -----------------
@@ -13,11 +11,12 @@ from __future__ import absolute_import
 
 __version__ = "0.1.0"
 
-import sys
 import os
+from os import path
+import sys
 import unittest
 
-from setup_test_env import *
+from .setup_test_env import *
 from distutilazy import util
 
 class TestUtil(unittest.TestCase):
@@ -28,6 +27,3 @@ class TestUtil(unittest.TestCase):
         self.assertTrue(me in files)
         files = util.find_files(TEST_DIR, "not_existing_file.py")
         self.assertEqual(files, [])
-
-if __name__ == "__main__":
-    unittest.main()
