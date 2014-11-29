@@ -7,10 +7,8 @@
     :license: MIT, see LICENSE for more details.
 """
 
-import os
+from os import path
+import glob
 
-__all__ = ["test_util", "test_clean"]
-
-for file_ in os.listdir(os.path.dirname(__file__)):
-    if file_.startswith('test_') and file_.endswith('.py'):
-        __all__.append(file_.rsplit('.py', 1)[0])
+test_modules = [path.splitext(path.basename(filename))[0] for filename in glob.glob(path.join(path.dirname(__file__), 'test*.py'))]
+__all__ = test_modules
