@@ -19,7 +19,7 @@ from distutils.command import clean
 
 from . import util
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 class clean_pyc(Command):
     description = """Clean root dir from complied python files"""
@@ -28,11 +28,13 @@ class clean_pyc(Command):
     def initialize_options(self):
         self.root = os.getcwd()
         self.extensions = "pyc,pyo,pyd"
+        self.directories = "__pycache__,"
 
     def finalize_options(self):
         if not os.path.exists(self.root):
             raise IOError("Failed to access root path %s" % self.root)
         self.extensions = [ext.strip() for ext in self.extensions.split(',')]
+        self.directories = [dirname.strip() for dirname in self.directories.split(',')]
 
     def find_compiled_files(self):
         """Find compiled Python files recursively in the root path
@@ -48,6 +50,16 @@ class clean_pyc(Command):
         self.announce("found %d compiled python files in %s" % (len(files), self.root))
         return files
 
+    def find_cache_directories(self):
+        directories = []
+        for dirname in self.directories:
+            dirs = util.find_directories(self.root, dirname)
+            log.debug("found {0} directories in {1}".format(len(dirs), self.root))
+            directories.extend(dirs)
+            del dirs
+        self.announce("found {0} python cache directories in %s".format(len(directories), self.root))
+        return directories
+
     def _clean_file(self, filename):
         """Clean a file if exists"""
         if not os.path.exists(filename):
@@ -57,12 +69,28 @@ class clean_pyc(Command):
         if not self.dry_run:
             os.remove(filename)
 
-    def run(self):
-        files = self.find_compiled_files()
-        self.announce("cleaning compiled python files in %s ..." % self.root)
+    def _clean_directory(self, dirname):
+        """Clean a directory if exists"""
+        if not os.path.exists(dirname):
+            return
+        self.announce("removing directory %s and all it's contents" % dirname)
         if not self.dry_run:
-            for filename in files:
-                self._clean_file(filename)
+            shutil.rmtree(dirname, True)
+
+    def run(self):
+        dirs = self.find_cache_directories()
+        if dirs:
+            self.announce("cleaning python cache directories in %s ..." % self.root)
+            if not self.dry_run:
+                for dirname in dirs:
+                    self._clean_directory(dirname)
+
+        files = self.find_compiled_files()
+        if files:
+            self.announce("cleaning compiled python files in %s ..." % self.root)
+            if not self.dry_run:
+                for filename in files:
+                    self._clean_file(filename)
 
 class clean_all(clean.clean, clean_pyc):
     description = """Clean root dir from temporary files, complied files, etc."""
