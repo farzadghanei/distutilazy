@@ -8,14 +8,17 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__version__ = "0.1.5"
+from __future__ import absolute_import
 
 import os
 import platform
 import subprocess
 from distutils.core import Command
 from distutils.errors import DistutilsOptionError
-import clean
+
+from . import clean
+
+__version__ = "0.2.0"
 
 is_windows = platform.system().upper() == "WINDOWS"
 path_separator = is_windows and ';' or ':'
@@ -33,7 +36,7 @@ class pyinstaller(Command):
         ("windowed", 'w', "Windowed app, no console for stdio"),
         ("clean", None, "Clean cached and temp files before build"),
         ("hidden-imports=", 'I', "comma separated list of extra modules to be imported"),
-        ("paths=", 'p', "extra paths to search for modules separated by '%s'" % path_separator),
+        ("paths=", 'p', "extra paths to search for modules separated by '{0}'".format(path_separator)),
     ]
 
     boolean_options = ["windowed", "clean"]
@@ -79,7 +82,7 @@ class pyinstaller(Command):
         if self.pyinstaller_path:
             self.pyinstaller_path = os.path.abspath(self.pyinstaller_path)
             if not os.path.exists(self.pyinstaller_path):
-                raise DistutilsOptionError("failed to find pyinstaller from %s" % self.pyinstaller_path)
+                raise DistutilsOptionError("failed to find pyinstaller from " + self.pyinstaller_path)
         self.pyinstaller_opts.extend( self.default_pyinstaller_opts() )
         if not self.name:
             self.name = self.distribution.metadata.get_name()
@@ -88,7 +91,7 @@ class pyinstaller(Command):
         if self.windowed:
             self.pyinstaller_opts.append("--windowed")
         if self.icon:
-            self.pyinstaller_opts.append("--icon=%s" % self.icon)
+            self.pyinstaller_opts.append("--icon=" + self.icon)
         if not is_windows:
             self.pyinstaller_opts.append("--strip")
 
@@ -96,14 +99,14 @@ class pyinstaller(Command):
         if self.hidden_imports:
             self.imports.extend( [ i.strip() for i in self.hidden_imports.split(',') if i.strip()] )
         for mod in self.imports:
-            self.pyinstaller_opts.append("--hidden-import=%s" % mod)
+            self.pyinstaller_opts.append("--hidden-import=" + mod)
 
         self.syspaths.extend( self.default_paths() )
         if self.paths:
             self.syspaths.extend( [p for p in self.paths.split(path_separator)] )
         for path in self.syspaths:
-            self.pyinstaller_opts.append("--paths=%s" % path)
-        self.pyinstaller_opts.append("--name=%s" % self.name)
+            self.pyinstaller_opts.append("--paths=" + path)
+        self.pyinstaller_opts.append("--name=" + self.name)
 
     def run(self):
         if not self.target:
@@ -112,7 +115,7 @@ class pyinstaller(Command):
         args = self.pyinstaller_opts
         args.append(self.target)
         args.insert(0, pi)
-        self.announce("running %s" % ' '.join(args))
+        self.announce("running " + ' '.join(args))
         code = subprocess.call(args)
         return code
 
@@ -138,4 +141,4 @@ class clean_all(clean.clean_all):
 
     def get_extra_paths(self):
         """Return list of extra files/directories to be removed"""
-        return ["%s.spec" % self.name]
+        return [self.name + ".spec"]

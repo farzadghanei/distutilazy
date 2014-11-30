@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
     distutilazy.tests.test_util
     -----------------
@@ -9,13 +7,14 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__version__ = "0.1.0"
+from __future__ import absolute_import
 
-import sys
 import os
+from os import path
+import sys
 import unittest
 
-from setup_test_env import *
+from .setup_test_env import TEST_DIR
 from distutilazy import util
 
 class TestUtil(unittest.TestCase):
@@ -27,5 +26,8 @@ class TestUtil(unittest.TestCase):
         files = util.find_files(TEST_DIR, "not_existing_file.py")
         self.assertEqual(files, [])
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_util_find_directories(self):
+        found = util.find_directories(path.dirname(TEST_DIR), "tes*")
+        self.assertTrue(TEST_DIR in found)
+        found = util.find_directories(TEST_DIR, "not_existing_dir")
+        self.assertEqual(found, [])

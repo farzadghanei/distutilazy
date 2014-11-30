@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
     distutilazy.tests.test_pyinstaller
     ----------------------------------
@@ -9,14 +7,14 @@
     :license: MIT, see LICENSE for more details.
 """
 
-__version__ = "0.1.1"
+from __future__ import absolute_import
 
 import sys
 import os
 import unittest
 import re
 
-from setup_test_env import *
+from .setup_test_env import *
 from distutilazy import pyinstaller
 from distutils.dist import Distribution
 
@@ -38,6 +36,3 @@ class TestPyinstaller(unittest.TestCase):
         self.assertTrue(paths)
         spec = paths.pop()
         self.assertTrue( re.match("\S+\.spec", spec) )
-
-if __name__ == "__main__":
-    unittest.main()
