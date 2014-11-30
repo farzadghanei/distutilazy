@@ -4,6 +4,7 @@ import os
 import sys
 import importlib
 import unittest
+import getopt
 
 import tests
 
@@ -35,19 +36,17 @@ def main(opts, args):
             print(msg)
 
     mod_names = args or tests.test_modules
-    loader = unittest.TestLoader()
     suite = unittest.TestSuite()
     for mod_name in mod_names:
         out("importing {0} ...".format(mod_name))
         mod = importlib.import_module("tests." + mod_name)
-        mod_tests = loader.loadTestsFromModule(mod)
-        map(suite.addTest, mod_tests)
+        mod_tests = unittest.defaultTestLoader.loadTestsFromModule(mod)
+        suite.addTests(mod_tests)
     out("running tests ...")
     unittest.TextTestRunner(verbosity=(2 if verbose else 1)).run(suite)
     return getattr(os, 'EX_OK', 0)
 
 if __name__ == '__main__':
-    import getopt
     opts, args = getopt.getopt(sys.argv[1:], "hv", ["help", "verbose"])
     sys.exit(main(opts, args))
 
