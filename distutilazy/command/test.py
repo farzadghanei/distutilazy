@@ -1,17 +1,14 @@
 """
+    distutilazy.command.test
+    ------------------------
 
-    distutilazy.command
-    -----------
-
-    Extra commands for setup.py using classes provided by distutilazy
+    Command to run unit tests
 
     :license: MIT, see LICENSE for more details.
 """
 
 import os
 import sys
-
-__all__ = ["clean_pyc", "clean_all", "pyinstaller", "test"]
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 if not base_dir in sys.path:
@@ -20,4 +17,7 @@ if not base_dir in sys.path:
     else:
         sys.path.append(base_dir)
 
+import distutilazy.test
 
+class run_tests(distutilazy.test.run_tests):
+    pass
