@@ -31,6 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import distutilazy
 import distutilazy.clean
+import distutilazy.test
 
 CLASSIFIERS = [
     "Development Status :: 4 - Beta",
@@ -60,7 +61,11 @@ params = dict(
     long_description = long_description,
     license = "MIT",
     classifiers = CLASSIFIERS,
-    cmdclass = {"clean_pyc": distutilazy.clean.clean_pyc, "clean_all": distutilazy.clean.clean_all}
+    cmdclass = {
+        "clean_pyc": distutilazy.clean.clean_pyc,
+        "clean_all": distutilazy.clean.clean_all,
+        "test": distutilazy.test.run_tests
+        }
 )
 
 if setuptools:
