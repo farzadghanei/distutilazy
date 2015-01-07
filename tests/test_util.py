@@ -17,6 +17,13 @@ import unittest
 from .setup_test_env import TEST_DIR
 from distutilazy import util
 
+# if running in a cached compiled python file
+# assume filename as python source file.
+# when tests are running together, test_clean
+# removes pyc files. but .py file will be available
+if __file__[-1].lower() == 'c':
+    __file__ = __file__[:-1]
+
 class TestUtil(unittest.TestCase):
 
     def test_util_find_files(self):
