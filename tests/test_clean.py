@@ -25,7 +25,7 @@ class TestClean(unittest.TestCase):
     def setUpClass(cls):
         cls.test_cache_dir = path.join(TEST_DIR, '_test_py_cache_')
         if path.exists(cls.test_cache_dir):
-            raise Error(
+            raise Exception(
                     "Test python cache directory exsits in {0}. Please remove this path".format(
                         cls.test_cache_dir
                         )
