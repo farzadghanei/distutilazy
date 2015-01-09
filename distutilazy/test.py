@@ -53,8 +53,10 @@ class run_tests(Command):
                 try:
                     self.announce("importing {0} as package ...".format(package_name))
                     package = importlib.import_module(package_name)
+                    if hasattr(package, '__path__') and os.path.abspath(package.__path__[0]) != os.path.abspath(dirname):
+                        raise ImportError("directory {1} is not a package to import".format(dirname))
                 except ImportError as err:
-                    self.announce("failed to importing {0}. not a package. {1}".format(package_name, err))
+                    self.announce("failed to import {0}. not a package. {1}".format(package_name, err))
                     sys.path.insert(0, dirname)
                     package_name = None
             modulename, _, extension = os.path.basename(filename).rpartition('.')
@@ -95,8 +97,10 @@ class run_tests(Command):
         try:
             self.announce("importing {0} as package ...".format(package_name))
             package = importlib.import_module(package_name)
+            if hasattr(package, '__path__') and os.path.abspath(package.__path__[0]) != os.path.abspath(root):
+                raise ImportError("directory {1} is not a package to import".format(root))
         except ImportError as err:
-            self.announce("failed to importing {0}. not a package. {1}".format(package_name, err))
+            self.announce("failed to import {0}. not a package. {1}".format(package_name, err))
             sys.path.insert(0, root)
             package_name = None
         modules = []
