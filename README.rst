@@ -20,13 +20,22 @@ Make sure distutilazy package is in sys.path, then add ``distutilazy.command`` p
 
 That's it. now you may use new commands direclty from your ``setup.py``:
 
+To clean compiled python files from the project:
+
 .. code-block:: bash
 
     $ python setup.py clean_pyc
 
+
+To run unit tests (by default runs tests/test_* files)
+
+.. code-block:: bash
+
+    $ python setup.py test
+
 Available commands are in distutilazy.command package as separate modules.
 
-A more detailed way is to use command classes, defined in distutilazy package root modules. Each module might define
+A more detailed way is to use command classes, defined in distutilazy package modules. Each module might define
 more than a single command class.
 
 The modules should be imported in setup.py, then desired classes might be assigned to command names using the ``cmdclasses`` parameter.
