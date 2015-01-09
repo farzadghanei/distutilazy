@@ -19,5 +19,5 @@ if not base_dir in sys.path:
 
 import distutilazy.test
 
-class run_tests(distutilazy.test.run_tests):
+class test(distutilazy.test.run_tests):
     pass
