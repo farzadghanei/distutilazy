@@ -27,7 +27,7 @@ To clean compiled python files from the project:
     $ python setup.py clean_pyc
 
 
-To run unit tests (by default runs tests/test_* files)
+To run unit tests (by default runs tests/test*.py files)
 
 .. code-block:: bash
 
