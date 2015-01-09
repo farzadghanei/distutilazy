@@ -16,7 +16,7 @@ Make sure distutilazy package is in sys.path, then add ``distutilazy.command`` p
 ::
 
     [global]
-    command-packages = distutilazy.command
+    command_packages = distutilazy.command
 
 That's it. now you may use new commands direclty from your ``setup.py``:
 
