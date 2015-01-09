@@ -11,7 +11,7 @@
 import os
 import sys
 
-__all__ = ["clean_pyc", "clean_all", "pyinstaller", "test"]
+__all__ = ["clean_pyc", "clean_all", "bdist_pyinstaller", "test"]
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 if not base_dir in sys.path:
