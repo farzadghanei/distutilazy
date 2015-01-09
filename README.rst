@@ -6,7 +6,7 @@ Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
  - clean_all: using distutils.clean and clean_pyc to clean all temporary files
- - pyinstaller: convinient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
+ - bdist_pyinstaller: convinient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
  - test: run unit tests
 
 How
@@ -27,7 +27,7 @@ To clean compiled python files from the project:
     $ python setup.py clean_pyc
 
 
-To run unit tests (by default runs tests/test*.py files)
+To run unit tests (by default runs tests/test*.py files):
 
 .. code-block:: bash
 
