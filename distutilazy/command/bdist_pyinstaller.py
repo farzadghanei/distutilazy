@@ -20,5 +20,5 @@ if not base_dir in sys.path:
 
 import distutilazy.pyinstaller
 
-class bdist_pyinstaller(distutilazy.pyinstaller.pyinstaller):
+class bdist_pyinstaller(distutilazy.pyinstaller.bdist_pyinstaller):
     pass

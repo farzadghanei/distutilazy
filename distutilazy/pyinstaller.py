@@ -23,7 +23,7 @@ __version__ = "0.2.0"
 is_windows = platform.system().upper() == "WINDOWS"
 path_separator = is_windows and ';' or ':'
 
-class pyinstaller(Command):
+class bdist_pyinstaller(Command):
     """Distutils command to run PyInstaller with configured defaults"""
 
     description = """Run PyInstaller to compile standalone binary executables"""
