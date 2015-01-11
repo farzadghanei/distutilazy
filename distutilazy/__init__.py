@@ -10,7 +10,7 @@
 import os
 import sys
 
-__version__ = '0.2.1'
+__version__ = '0.3.0'
 __all__ = ['clean', 'pyinstaller', 'command']
 
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
