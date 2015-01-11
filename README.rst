@@ -2,12 +2,16 @@
 Distutilazy
 ===========
 
+.. image:: https://travis-ci.org/farzadghanei/distutilazy.svg?branch=master
+    :target: https://travis-ci.org/farzadghanei/distutilazy
+
 Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
  - clean_all: using distutils.clean and clean_pyc to clean all temporary files
  - bdist_pyinstaller: convenient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
  - test: run unit tests
+
 
 How
 ---
