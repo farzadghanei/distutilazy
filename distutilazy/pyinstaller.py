@@ -30,7 +30,7 @@ class bdist_pyinstaller(Command):
 
     user_options = [
         ("target=", 't', "Taget Python app to bundle"),
-        ("pyinstaller=", None, "Path to pyinstaller executable"),
+        ("pyinstaller-path=", None, "Path to pyinstaller executable"),
         ("name=", 'n', "Name of the bundled app"),
         ("icon=", 'i', "Path to icon resource"),
         ("windowed", 'w', "Windowed app, no console for stdio"),
