@@ -97,7 +97,7 @@ class run_tests(Command):
             try:
                 self.announce("importing {0} as package ...".format(package_name))
                 importlib.import_module(package_name)
-            except (ImportError, ValueError) as err:
+            except (ImportError, ValueError, SystemError) as err:
                 self.announce("failed to import {0}. not a package. {1}".format(package_name, err))
                 sys.path.insert(0, root)
                 package_name = None
@@ -109,8 +109,11 @@ class run_tests(Command):
                 if package_name:
                     modulename = '.' + modulename
                 self.announce("importing module {0} from file {1} ...".format(modulename, filename))
-                module = importlib.import_module(modulename, package=package_name)
-                modules.append(module)
+                try:
+                    module = importlib.import_module(modulename, package=package_name)
+                    modules.append(module)
+                except (ImportError, ValueError, SystemError) as err:
+                    self.announce("failed to import {0} from {1}. {2}. skipping this file!".format(modulename, filename, err))
         return modules
 
     def test_suite_for_modules(self, modules):
