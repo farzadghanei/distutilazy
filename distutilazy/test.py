@@ -13,12 +13,12 @@ from __future__ import absolute_import
 
 import os
 import sys
-import glob
+import fnmatch
 import importlib
 import unittest
 from distutils.core import Command
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 class run_tests(Command):
     description = """Run test suite"""
@@ -90,30 +90,30 @@ class run_tests(Command):
 
     def find_test_modules_from_test_files(self, root, pattern):
         """Return list of test modules from the path whose filename matches the pattern"""
-        test_files = glob.glob(os.path.join(root, pattern))
-        if not test_files:
-            return []
-        package_name = os.path.basename(root)
-        try:
-            self.announce("importing {0} as package ...".format(package_name))
-            package = importlib.import_module(package_name)
-            if hasattr(package, '__path__') and os.path.abspath(package.__path__[0]) != os.path.abspath(root):
-                raise ImportError("directory {1} is not a package to import".format(root))
-        except ImportError as err:
-            self.announce("failed to import {0}. not a package. {1}".format(package_name, err))
-            sys.path.insert(0, root)
-            package_name = None
         modules = []
-        for filename in test_files:
-            modulename, _, extension = os.path.basename(filename).rpartition('.')
-            if not modulename:
-                self.announce("failed to find module name from filename '{0}'. skipping this test".format(filename))
-                continue
-            if package_name:
-                modulename = '.' + modulename
-            self.announce("importing module {0} from file {1} ...".format(modulename, filename))
-            module = importlib.import_module(modulename, package=package_name)
-            modules.append(module)
+        root = os.path.abspath(root)
+        for (root, dirnames, filenames) in os.walk(root):
+            package_name = os.path.basename(root)
+            try:
+                self.announce("importing {0} as package ...".format(package_name))
+                importlib.import_module(package_name)
+            except (ImportError, ValueError, SystemError) as err:
+                self.announce("failed to import {0}. not a package. {1}".format(package_name, err))
+                sys.path.insert(0, root)
+                package_name = None
+            for filename in fnmatch.filter(filenames, pattern):
+                modulename, _, extension = os.path.basename(filename).rpartition('.')
+                if not modulename:
+                    self.announce("failed to find module name from filename '{0}'. skipping this test".format(filename))
+                    continue
+                if package_name:
+                    modulename = '.' + modulename
+                self.announce("importing module {0} from file {1} ...".format(modulename, filename))
+                try:
+                    module = importlib.import_module(modulename, package=package_name)
+                    modules.append(module)
+                except (ImportError, ValueError, SystemError) as err:
+                    self.announce("failed to import {0} from {1}. {2}. skipping this file!".format(modulename, filename, err))
         return modules
 
     def test_suite_for_modules(self, modules):

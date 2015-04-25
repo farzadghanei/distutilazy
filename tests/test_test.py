@@ -60,7 +60,9 @@ class TestTest(unittest.TestCase):
         self.assertEqual(1, len(modules))
         self.assertEqual(filename, path.basename(modules.pop().__file__))
         modules = test_.find_test_modules_from_test_files(here, 'test_*')
-        self.assertIn(filename, self._get_module_filenames(modules))
+        module_names = map(lambda mod: path.basename(mod.__file__), modules)
+        self.assertIn(filename, module_names)
+        self.assertIn('test_subdir.py', module_names)
 
     def test_test_suite_for_modules(self):
         dist = Distribution()
