@@ -1,21 +1,21 @@
 """
-    distutilazy.tests.test_test
-    ----------------------------
+distutilazy.tests.test_test
+----------------------------
 
-    Tests for distutilazy.test module
+Tests for distutilazy.test module
 
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
 from __future__ import absolute_import
 
+from os.path import dirname, basename
 import sys
-import os
-from os import path
-import shutil
 import unittest
 
-from .setup_test_env import TEST_DIR
+sys.path.insert(0, dirname(dirname(__file__)))
+sys.path.insert(0, dirname(__file__))
+
 from distutilazy import test
 from distutils.dist import Distribution
 
@@ -26,16 +26,22 @@ from distutils.dist import Distribution
 if __file__[-1].lower() == 'c':
     __file__ = __file__[:-1]
 
+def get_module_py_file_names(modules):
+    return map(
+            lambda name: name[:-1] if name.endswith('.pyc') else name,
+            map(lambda m: basename(m.__file__), modules)
+        )
+
 class TestTest(unittest.TestCase):
     def _get_module_filenames(self, modules):
-        return map(lambda m: path.basename(m.__file__), modules)
+        return map(lambda m: basename(m.__file__), modules)
 
     def test_find_modules_from_package_path(self):
         dist = Distribution()
         test_ = test.run_tests(dist)
         test_.finalize_options()
-        here = path.dirname(__file__)
-        filename = path.basename(__file__)
+        here = dirname(__file__)
+        filename = basename(__file__)
         modules = test_.find_test_modules_from_package_path(here)
         self.assertIn(filename, self._get_module_filenames(modules))
 
@@ -46,21 +52,21 @@ class TestTest(unittest.TestCase):
         self.assertEqual([], test_.get_modules_from_files(['none_existing_file']))
         modules = test_.get_modules_from_files([__file__])
         self.assertEqual(1, len(modules))
-        self.assertEqual(path.basename(__file__), path.basename(modules.pop().__file__))
+        self.assertEqual(basename(__file__), basename(modules.pop().__file__))
 
     def test_find_modules_from_files(self):
         dist = Distribution()
         test_ = test.run_tests(dist)
         test_.finalize_options()
-        here = path.dirname(__file__)
-        filename = path.basename(__file__)
+        here = dirname(__file__)
+        filename = basename(__file__)
         modules = test_.find_test_modules_from_test_files(here, 'none_exiting_pattern')
         self.assertEqual([], modules)
         modules = test_.find_test_modules_from_test_files(here, filename)
         self.assertEqual(1, len(modules))
-        self.assertEqual(filename, path.basename(modules.pop().__file__))
+        self.assertEqual(filename, basename(modules.pop().__file__))
         modules = test_.find_test_modules_from_test_files(here, 'test_*')
-        module_names = map(lambda mod: path.basename(mod.__file__), modules)
+        module_names = get_module_py_file_names(modules)
         self.assertIn(filename, module_names)
         self.assertIn('test_subdir.py', module_names)
 
@@ -79,3 +85,5 @@ class TestTest(unittest.TestCase):
         self.assertTrue(hasattr(runner, 'run'))
         self.assertTrue(hasattr(runner.run, '__call__'))
 
+if __name__ == '__main__':
+    unittest.main()

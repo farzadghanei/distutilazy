@@ -35,7 +35,7 @@ class run_tests(Command):
 
     def finalize_options(self):
         if not os.path.exists(self.root):
-            raise IOError("Failed to access root path " + self.root)
+            raise IOError("Failed to access root path '{}'".format(self.root))
         verbosity = min(int(self.verbosity), 3)
         if verbosity < 1:
             self.verbosity = 1
