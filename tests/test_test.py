@@ -18,7 +18,7 @@ here = dirname(__file__)
 sys.path.insert(0, dirname(here))
 sys.path.insert(0, here)
 
-from distutilazy import test
+from distutilazy.test import RunTests, test_suite_for_modules
 
 __file__ = basename(__file__[:-1] if __file__.endswith('.pyc') else __file__)
 
@@ -34,14 +34,14 @@ class TestTest(TestCase):
 
     def test_find_modules_from_package_path(self):
         dist = Distribution()
-        test_runner = test.run_tests(dist)
+        test_runner = RunTests(dist)
         test_runner.finalize_options()
         modules = test_runner.find_test_modules_from_package_path(here)
         self.assertIn(__file__, get_module_py_file_names(modules))
 
     def test_get_modules_from_files(self):
         dist = Distribution()
-        test_runner = test.run_tests(dist)
+        test_runner = RunTests(dist)
         test_runner.finalize_options()
         self.assertEqual(
             [], test_runner.get_modules_from_files(['none_existing_file']))
@@ -51,7 +51,7 @@ class TestTest(TestCase):
 
     def test_find_test_modules_from_test_files(self):
         dist = Distribution()
-        test_runner = test.run_tests(dist)
+        test_runner = RunTests(dist)
         test_runner.finalize_options()
         modules = test_runner.find_test_modules_from_test_files(
             here, 'none_exiting_pattern')
@@ -65,15 +65,11 @@ class TestTest(TestCase):
         self.assertIn('test_subdir.py', module_names)
 
     def test_test_suite_for_modules(self):
-        dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        suite = test_.test_suite_for_modules([])
-        self.assertIsInstance(suite, TestSuite)
+        self.assertIsInstance(test_suite_for_modules([]), TestSuite)
 
     def test_get_test_runner(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
+        test_ = RunTests(dist)
         test_.finalize_options()
         runner = test_.get_test_runner()
         self.assertTrue(hasattr(runner, 'run'))

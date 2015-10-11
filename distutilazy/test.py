@@ -13,12 +13,20 @@ import os
 from os.path import abspath, basename, dirname
 import sys
 import fnmatch
-import importlib
 from importlib import import_module
 import unittest
 from distutils.core import Command
 
 __version__ = "0.2.0"
+
+
+def test_suite_for_modules(modules):
+    suite = unittest.TestSuite()
+    test_loader = unittest.defaultTestLoader
+    for module in modules:
+        module_tests = test_loader.loadTestsFromModule(module)
+        suite.addTests(module_tests)
+    return suite
 
 
 class RunTests(Command):
@@ -147,14 +155,6 @@ class RunTests(Command):
                     )
         return modules
 
-    def test_suite_for_modules(self, modules):
-        suite = unittest.TestSuite()
-        testLoader = unittest.defaultTestLoader
-        for module in modules:
-            module_tests = testLoader.loadTestsFromModule(module)
-            suite.addTests(module_tests)
-        return suite
-
     def get_test_runner(self):
         return unittest.TextTestRunner(verbosity=self.verbosity)
 
@@ -171,7 +171,7 @@ class RunTests(Command):
         if not modules:
             self.announce("found no test files")
             return False
-        suite = self.test_suite_for_modules(modules)
+        suite = test_suite_for_modules(modules)
         runner = self.get_test_runner()
         self.announce("running tests ...")
         runner.run(suite)
