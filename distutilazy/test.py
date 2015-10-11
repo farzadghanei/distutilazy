@@ -17,7 +17,7 @@ from importlib import import_module
 import unittest
 from distutils.core import Command
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 
 def test_suite_for_modules(modules):
@@ -175,6 +175,5 @@ class RunTests(Command):
         runner = self.get_test_runner()
         self.announce("running tests ...")
         runner.run(suite)
-
 
 run_tests = RunTests

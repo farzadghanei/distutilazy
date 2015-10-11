@@ -69,9 +69,9 @@ class TestTest(TestCase):
 
     def test_get_test_runner(self):
         dist = Distribution()
-        test_ = RunTests(dist)
-        test_.finalize_options()
-        runner = test_.get_test_runner()
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        runner = test_runner.get_test_runner()
         self.assertTrue(hasattr(runner, 'run'))
         self.assertTrue(hasattr(runner.run, '__call__'))
 
