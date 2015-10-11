@@ -76,7 +76,7 @@ class RunTests(Command):
             modules.append(module)
         return modules
 
-    def _import_dir_as_package(self, directory):
+    def _import_dir_as_package(self, directory, ensure=False):
         package_name = basename(directory)
         abs_dir = abspath(directory)
         if package_name:
@@ -84,7 +84,7 @@ class RunTests(Command):
                 self.announce(
                     "importing '{0}' as package ...".format(package_name))
                 package = import_module(package_name)
-                if hasattr(package, '__path__') and \
+                if ensure and hasattr(package, '__path__') and \
                             abspath(package.__path__[0]) != abs_dir:
                     raise ImportError(
                         "directory '{}' is not a package to import".format(
