@@ -1,18 +1,17 @@
 """
+distutilazy.command.clean_pyc
+-----------------------------
 
-    distutilazy.command.clean_pyc
-    -----------------------------
+Command to clean compiled python files
 
-    Command to clean compiled python files
-
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
-import os
+from os.path import abspath, dirname
 import sys
 
-base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-if not base_dir in sys.path:
+base_dir = abspath(dirname(dirname(dirname(__file__))))
+if base_dir not in sys.path:
     if len(sys.path):
         sys.path.insert(1, base_dir)
     else:
@@ -20,5 +19,6 @@ if not base_dir in sys.path:
 
 import distutilazy.clean
 
-class clean_pyc(distutilazy.clean.clean_pyc):
+
+class clean_pyc(distutilazy.clean.CleanPyc):
     pass

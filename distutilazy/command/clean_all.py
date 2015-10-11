@@ -1,17 +1,17 @@
 """
-    distutilazy.command.clean_all
-    -----------------------------
+distutilazy.command.clean_all
+-----------------------------
 
-    Command to clean all temporary files
+Command to clean all temporary files
 
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
-import os
+from os.path import abspath, dirname
 import sys
 
-base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-if not base_dir in sys.path:
+base_dir = abspath(dirname(dirname(dirname(__file__))))
+if base_dir not in sys.path:
     if len(sys.path):
         sys.path.insert(1, base_dir)
     else:
@@ -19,5 +19,6 @@ if not base_dir in sys.path:
 
 import distutilazy.pyinstaller
 
-class clean_all(distutilazy.pyinstaller.clean_all):
+
+class clean_all(distutilazy.pyinstaller.CleanAll):
     pass

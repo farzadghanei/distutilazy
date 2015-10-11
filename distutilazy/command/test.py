@@ -1,17 +1,17 @@
 """
-    distutilazy.command.test
-    ------------------------
+distutilazy.command.test
+------------------------
 
-    Command to run unit tests
+Command to run unit tests
 
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
-import os
+from os.path import abspath, dirname
 import sys
 
-base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-if not base_dir in sys.path:
+base_dir = abspath(dirname(dirname(dirname(__file__))))
+if base_dir not in sys.path:
     if len(sys.path):
         sys.path.insert(1, base_dir)
     else:
@@ -19,5 +19,6 @@ if not base_dir in sys.path:
 
 import distutilazy.test
 
-class test(distutilazy.test.run_tests):
+
+class test(distutilazy.test.RunTests):
     pass
