@@ -114,42 +114,37 @@ class RunTests(Command):
         return []
 
     def find_test_modules_from_test_files(self, root, pattern):
-        """Return list of test modules from the path whose filename matches the pattern"""
+        """Return list of test modules from the the files in the path
+        whose name match the pattern
+        """
         modules = []
-        root = os.path.abspath(root)
-        for (root, dirnames, filenames) in os.walk(root):
-            package_name = os.path.basename(root)
-            try:
-                self.announce(
-                    "importing {0} as package ...".format(package_name))
-                importlib.import_module(package_name)
-            except (ImportError, ValueError, SystemError) as err:
-                self.announce(
-                    "failed to import {0}. not a package. {1}".format(
-                        package_name, err))
-                sys.path.insert(0, root)
-                package_name = None
-            for filename in fnmatch.filter(filenames, pattern):
-                modulename, _, extension = os.path.basename(
-                    filename).rpartition('.')
-                if not modulename:
+        abs_root = abspath(root)
+        for (dir_path, directories, file_names) in os.walk(abs_root):
+            package_name = self._import_dir_as_package(dir_path)
+            if not package_name:
+                sys.path.insert(0, dir_path)
+            for filename in fnmatch.filter(file_names, pattern):
+                module_name, _, extension = basename(filename).rpartition('.')
+                if not module_name:
                     self.announce(
-                        "failed to find module name from filename '{0}'. skipping this test".format(
-                            filename))
+                        "failed to find module name from filename '{}'." +
+                        "skipping this test".format(filename))
                     continue
                 if package_name:
-                    modulename = '.' + modulename
+                    module_name = '.' + module_name
                 self.announce(
-                    "importing module {0} from file {1} ...".format(modulename,
-                                                                    filename))
+                    "importing module '{}' from '{}' ...".format(
+                        module_name, filename
+                    )
+                )
                 try:
-                    module = importlib.import_module(modulename,
-                                                     package=package_name)
+                    module = import_module(module_name, package_name)
                     modules.append(module)
-                except (ImportError, ValueError, SystemError) as err:
+                except (ImportError, ValueError, SystemError) as ex:
                     self.announce(
-                        "failed to import {0} from {1}. {2}. skipping this file!".format(
-                            modulename, filename, err))
+                        "failed to import '{}' from '{}'. {}." +
+                        "skipping this file!".format(module_name, filename, ex)
+                    )
         return modules
 
     def test_suite_for_modules(self, modules):
