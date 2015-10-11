@@ -23,8 +23,11 @@ from distutils.dist import Distribution
 # assume filename as python source file.
 # when tests are running together, test_clean
 # removes pyc files. but .py file will be available
+_me_ = basename(__file__[:-1] if __file__.endswith('.pyc') else __file__)
+
 if __file__[-1].lower() == 'c':
     __file__ = __file__[:-1]
+
 
 def get_module_py_file_names(modules):
     return map(
@@ -32,29 +35,28 @@ def get_module_py_file_names(modules):
             map(lambda m: basename(m.__file__), modules)
         )
 
+
 class TestTest(unittest.TestCase):
-    def _get_module_filenames(self, modules):
-        return map(lambda m: basename(m.__file__), modules)
 
     def test_find_modules_from_package_path(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
+        test_runner = test.run_tests(dist)
+        test_runner.finalize_options()
         here = dirname(__file__)
-        filename = basename(__file__)
-        modules = test_.find_test_modules_from_package_path(here)
-        self.assertIn(filename, self._get_module_filenames(modules))
+        modules = test_runner.find_test_modules_from_package_path(here)
+        self.assertIn(_me_, get_module_py_file_names(modules))
 
     def test_get_modules_from_files(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        self.assertEqual([], test_.get_modules_from_files(['none_existing_file']))
-        modules = test_.get_modules_from_files([__file__])
+        test_runner = test.run_tests(dist)
+        test_runner.finalize_options()
+        self.assertEqual(
+            [], test_runner.get_modules_from_files(['none_existing_file']))
+        modules = test_runner.get_modules_from_files([_me_])
         self.assertEqual(1, len(modules))
-        self.assertEqual(basename(__file__), basename(modules.pop().__file__))
+        self.assertEqual(_me_, basename(modules.pop().__file__))
 
-    def test_find_modules_from_files(self):
+    def test_find_test_modules_from_test_files(self):
         dist = Distribution()
         test_ = test.run_tests(dist)
         test_.finalize_options()
