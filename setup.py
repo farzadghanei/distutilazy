@@ -1,16 +1,12 @@
 #!/usr/bin/env python
 
 """
-
 distutilazy
-===========
+-----------
 
 Extra distutils commands.
 
-License
--------
-Distutilazy is released under the terms of `MIT license <http://opensource.org/licenses/MIT>`_.
-
+:license: MIT, see LICENSE for more details.
 """
 
 from __future__ import print_function
@@ -25,7 +21,10 @@ except ImportError as exp:
     setuptools = None
     from distutils.core import setup
     if (sys.version_info[0]) < 3:
-        print("using distutils. install setuptools for more options", file=sys.stderr)
+        print(
+            "using distutils. install setuptools for more options",
+            file=sys.stderr
+        )
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,6 +40,10 @@ CLASSIFIERS = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.2",
+    "Programming Language :: Python :: 3.3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -64,9 +67,9 @@ params = dict(
     license = "MIT",
     classifiers = CLASSIFIERS,
     cmdclass = {
-        "clean_pyc": distutilazy.clean.clean_pyc,
-        "clean_all": distutilazy.clean.clean_all,
-        "test": distutilazy.test.run_tests
+        "clean_pyc": distutilazy.clean.CleanPyc,
+        "clean_all": distutilazy.clean.CleanAll,
+        "test": distutilazy.test.RunTests
         }
 )
 
