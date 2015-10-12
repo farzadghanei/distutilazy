@@ -68,6 +68,7 @@ params = dict(
     classifiers = CLASSIFIERS,
     cmdclass = {
         "clean_pyc": distutilazy.clean.CleanPyc,
+        "clean_jython_class": distutilazy.clean.CleanJythonClass,
         "clean_all": distutilazy.clean.CleanAll,
         "test": distutilazy.test.RunTests
         }

@@ -1,6 +1,6 @@
-
+***********
 Distutilazy
-===========
+***********
 
 .. image:: https://travis-ci.org/farzadghanei/distutilazy.svg?branch=master
     :target: https://travis-ci.org/farzadghanei/distutilazy
@@ -8,14 +8,16 @@ Distutilazy
 Extra distutils commands, including:
 
  - clean_pyc: clean compiled python files
- - clean_all: using distutils.clean and clean_pyc to clean all temporary files
+ - clean_jython_class: clean compiled .class files created by Jython
+ - clean_all: using ``distutils.clean``, ``clean_pyc`` and ``clean_jython_class`` to clean all temporary files
  - bdist_pyinstaller: convenient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
  - test: run unit tests
 
 
 How
 ---
-Make sure distutilazy package is in sys.path, then add ``distutilazy.command`` package to the list of command packages in your ``setup.cfg`` file.
+Make sure distutilazy package is in ``sys.path``, then add ``distutilazy.command`` package
+to the list of command packages in your ``setup.cfg`` file.
 
 ::
 
@@ -37,20 +39,28 @@ To run unit tests (by default runs tests/test*.py files):
 
     $ python setup.py test
 
-Available commands are in distutilazy.command package as separate modules.
+Available commands are in ``distutilazy.command`` package, each command as a separate module.
 
-A more detailed way is to use command classes, defined in distutilazy package modules. Each module might define
-more than a single command class.
+To use custom command names for the same functionality, use command classes defined in distutilazy modules
+(each module might define more than a single command class).
 
-The modules should be imported in setup.py, then desired classes might be assigned to command names using the ``cmdclass`` parameter.
+The modules should be imported in `setup.py`, then desired classes might be assigned to command names using the ``cmdclass`` parameter.
 
 ::
 
     import distutilazy.clean
 
     setup(
-        cmdclass: {'clean_pyc': distutilazy.clean.clean_pyc}
+        cmdclass: {
+            'clean_pyc': distutilazy.clean.CleanPyc,
+            'clean_jython': distutilazy.clean.CleanJythonClass,
+            'clear': distutilazy.clean.CleanAll
+        }
     )
+
+To extend (or customize) the behavior of the command classes define a class extending from these command classes,
+and use that custom class in ``cmdclass``.
+
 
 License
 -------
