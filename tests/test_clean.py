@@ -9,19 +9,20 @@ from __future__ import absolute_import
 
 import sys
 from shutil import rmtree
-from os import path, mkdir
+from os import path, mkdir, remove
 from os.path import dirname, abspath
 from unittest import TestCase, main
 from distutils.dist import Distribution
+from tempfile import mkstemp, mkdtemp
 
 here = dirname(__file__)
 sys.path.insert(0, dirname(here))
 sys.path.insert(0, here)
 
-from distutilazy.clean import CleanPyc, CleanAll
+from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 
-class TestClean(TestCase):
+class TestCleanPyc(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -37,6 +38,66 @@ class TestClean(TestCase):
     def tearDownAfter(cls):
         if path.exists(cls.test_cache_dir):
             rmtree(cls.test_cache_dir, True)
+
+    def test_clean_pyc(self):
+        try:
+            temp_files = []
+            temp_dir = mkdtemp(suffix='_distutilazy_test')
+            for i in range(5):
+                _, temp_filename = mkstemp(suffix=".pyc", dir=temp_dir)
+                temp_files.append(temp_filename)
+            temp_files.sort()
+            dist = Distribution()
+            pyc_cleaner = CleanPyc(dist)
+            pyc_cleaner.root = temp_dir
+            pyc_cleaner.finalize_options()
+            self.assertEqual(
+                    sorted(pyc_cleaner.find_compiled_files()),
+                    temp_files
+            )
+            pyc_cleaner.run()
+
+            for temp_filename in temp_files:
+                self.assertFalse(path.exists(temp_filename))
+        finally:
+            if path.exists(temp_dir):
+                rmtree(temp_dir, True)
+
+    def test_clean_pyc_finds_nothing(self):
+        dist = Distribution()
+        pyc_cleaner = CleanPyc(dist)
+        pyc_cleaner.extensions = ".ppyycc, .ppyyoo"
+        pyc_cleaner.finalize_options()
+        self.assertEqual(pyc_cleaner.extensions, [".ppyycc", ".ppyyoo"])
+        self.assertEqual(pyc_cleaner.find_compiled_files(), [])
+
+    def test_clean_py_cache_dirs(self):
+        dist = Distribution()
+        pycache_cleaner = CleanPyc(dist)
+        pycache_cleaner.directories = "_test_py_cache_"
+        pycache_cleaner.finalize_options()
+        self.assertEqual(pycache_cleaner.directories, ["_test_py_cache_"])
+        self.assertEqual(
+            pycache_cleaner.find_cache_directories(),
+            [self.__class__.test_cache_dir]
+        )
+        pycache_cleaner.run()
+        self.assertFalse(path.exists(self.__class__.test_cache_dir))
+
+    def test_clean_py_cache_dirs_finds_nothing(self):
+        dist = Distribution()
+        pycache_cleaner = CleanPyc(dist)
+        pycache_cleaner.extensions = ".ppyycc, .ppyyoo"
+        pycache_cleaner.directories = "not_exist, and_not_found"
+        pycache_cleaner.finalize_options()
+        self.assertEqual(
+            pycache_cleaner.directories,
+            ["not_exist", "and_not_found"]
+        )
+        self.assertEqual(pycache_cleaner.find_cache_directories(), [])
+
+
+class TestCleanAll(TestCase):
 
     def test_clean_all(self):
         dist = Distribution()
@@ -64,38 +125,41 @@ class TestClean(TestCase):
         self.assertEqual(bad_calls, [])
         self.assertEqual(len(good_calls), good_calls_should_be)
 
-    def test_clean_pyc(self):
+
+class TestCleanJythonClass(TestCase):
+
+    def test_clean_classes_finds_nothing(self):
         dist = Distribution()
-        pyc_cleaner = CleanPyc(dist)
-        pyc_cleaner.extensions = "ppyycc, ppyyoo"
+        pyc_cleaner = CleanJythonClass(dist)
+        pyc_cleaner.extensions = "$py.cla$$, .clazz"
         pyc_cleaner.finalize_options()
-        self.assertEqual(pyc_cleaner.extensions, ["ppyycc", "ppyyoo"])
-        self.assertEqual(pyc_cleaner.find_compiled_files(), [])
+        self.assertEqual(pyc_cleaner.extensions, ["$py.cla$$", ".clazz"])
+        self.assertEqual(pyc_cleaner.find_class_files(), [])
 
-    def test_clean_py_cache_dirs(self):
-        dist = Distribution()
-        pycache_cleaner = CleanPyc(dist)
-        pycache_cleaner.directories = "_test_py_cache_"
-        pycache_cleaner.finalize_options()
-        self.assertEqual(pycache_cleaner.directories, ["_test_py_cache_"])
-        self.assertEqual(
-            pycache_cleaner.find_cache_directories(),
-            [self.__class__.test_cache_dir]
-        )
-        pycache_cleaner.run()
-        self.assertFalse(path.exists(self.__class__.test_cache_dir))
+    def test_clean_class(self):
+        try:
+            temp_files = []
+            temp_dir = mkdtemp(suffix='_distutilazy_test')
+            for i in range(5):
+                _, temp_filename = mkstemp(suffix="$py.class", dir=temp_dir)
+                temp_files.append(temp_filename)
+            temp_files.sort()
+            dist = Distribution()
+            jython_cleaner = CleanJythonClass(dist)
+            jython_cleaner.root = temp_dir
+            jython_cleaner.finalize_options()
+            self.assertEqual(
+                    sorted(jython_cleaner.find_class_files()),
+                    temp_files
+            )
+            jython_cleaner.run()
 
-    def test_clean_py_cache_dirs_finds_nothing(self):
-        dist = Distribution()
-        pycache_cleaner = CleanPyc(dist)
-        pycache_cleaner.extensions = "ppyycc, ppyyoo"
-        pycache_cleaner.directories = "not_exist, and_not_found"
-        pycache_cleaner.finalize_options()
-        self.assertEqual(
-            pycache_cleaner.directories,
-            ["not_exist", "and_not_found"]
-        )
-        self.assertEqual(pycache_cleaner.find_cache_directories(), [])
+            for temp_filename in temp_files:
+                self.assertFalse(path.exists(temp_filename))
+        finally:
+            if path.exists(temp_dir):
+                rmtree(temp_dir, True)
+
 
 if __name__ == "__main__":
     main()
