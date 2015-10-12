@@ -8,7 +8,6 @@ Test distutilazy.util module.
 from __future__ import absolute_import
 
 import sys
-from platform import python_implementation
 from os.path import dirname, realpath
 from unittest import TestCase, main
 
@@ -18,10 +17,10 @@ sys.path.insert(0, here)
 
 from distutilazy import util
 
-if python_implementation().lower() == 'jython':
-    __file__ = __file__[:-9] + '.py' if __file__.endswith('$py.class') else __file__
-else:
-    __file__ = __file__[:-1] if __file__.endswith('.pyc') else __file__
+if __file__.endswith('$py.class'):
+    __file__ = __file__[:-9] + '.py'
+elif __file__.endswith('.pyc'):
+    __file__ = __file__[:-1]
 
 class TestUtil(TestCase):
 
