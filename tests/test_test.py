@@ -9,8 +9,8 @@ Tests for distutilazy.test module
 
 from __future__ import absolute_import
 
-from os.path import dirname, basename
 import sys
+from os.path import dirname, basename
 from distutils.dist import Distribution
 from unittest import TestCase, TestSuite, main
 
@@ -23,11 +23,8 @@ from distutilazy.test import RunTests, test_suite_for_modules
 __file__ = basename(__file__[:-1] if __file__.endswith('.pyc') else __file__)
 
 
-def get_module_py_file_names(modules):
-    return map(
-            lambda name: name[:-1] if name.endswith('.pyc') else name,
-            map(lambda m: basename(m.__file__), modules)
-        )
+def get_module_names(modules):
+    return map(lambda m: m.__name__, modules)
 
 
 class TestTest(TestCase):
@@ -37,7 +34,7 @@ class TestTest(TestCase):
         test_runner = RunTests(dist)
         test_runner.finalize_options()
         modules = test_runner.find_test_modules_from_package_path(here)
-        self.assertIn(__file__, get_module_py_file_names(modules))
+        self.assertIn('tests.test_test', get_module_names(modules))
 
     def test_get_modules_from_files(self):
         dist = Distribution()
@@ -47,7 +44,7 @@ class TestTest(TestCase):
             [], test_runner.get_modules_from_files(['none_existing_file']))
         modules = test_runner.get_modules_from_files([__file__])
         self.assertEqual(1, len(modules))
-        self.assertEqual(__file__, basename(modules.pop().__file__))
+        self.assertEqual('test_test', modules.pop().__name__)
 
     def test_find_test_modules_from_test_files(self):
         dist = Distribution()
@@ -58,11 +55,11 @@ class TestTest(TestCase):
         self.assertEqual([], modules)
         modules = test_runner.find_test_modules_from_test_files(here, __file__)
         self.assertEqual(1, len(modules))
-        self.assertEqual(__file__, basename(modules.pop().__file__))
+        self.assertEqual('tests.test_test', modules.pop().__name__)
         modules = test_runner.find_test_modules_from_test_files(here, 'test_*')
-        module_names = get_module_py_file_names(modules)
-        self.assertIn(__file__, module_names)
-        self.assertIn('test_subdir.py', module_names)
+        module_names = get_module_names(modules)
+        self.assertIn('tests.test_test', module_names)
+        self.assertIn('test_subdir', module_names)
 
     def test_test_suite_for_modules(self):
         self.assertIsInstance(test_suite_for_modules([]), TestSuite)

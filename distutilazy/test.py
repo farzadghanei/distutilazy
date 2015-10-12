@@ -16,6 +16,7 @@ import fnmatch
 from importlib import import_module
 import unittest
 from distutils.core import Command
+from types import ModuleType
 
 __version__ = "0.3.0"
 
@@ -113,7 +114,9 @@ class RunTests(Command):
                 for module_name in package.__all__:
                     module = import_module('{}.{}'.format(
                         package_name, module_name))
-                    modules.append(module)
+                    if type(module) == ModuleType \
+                            and module not in modules:
+                        modules.append(module)
                 return modules
         except ImportError as err:
             self.announce(
@@ -147,7 +150,8 @@ class RunTests(Command):
                 )
                 try:
                     module = import_module(module_name, package_name)
-                    modules.append(module)
+                    if type(module) == ModuleType and module not in modules:
+                        modules.append(module)
                 except (ImportError, ValueError, SystemError) as ex:
                     self.announce(
                         "failed to import '{}' from '{}'. {}." +
