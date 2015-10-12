@@ -9,7 +9,7 @@ from __future__ import absolute_import
 
 import sys
 from shutil import rmtree
-from os import path, mkdir, remove
+from os import path, mkdir
 from os.path import dirname, abspath
 from unittest import TestCase, main
 from distutils.dist import Distribution
