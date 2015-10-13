@@ -10,8 +10,8 @@ Extra distutils command classes.
 from os.path import dirname, abspath
 import sys
 
-__version__ = '0.4.0'
-__all__ = ['clean', 'pyinstaller', 'command']
+__version__ = "0.4.0"
+__all__ = ("clean", "pyinstaller", "command")
 
 base_dir = abspath(dirname(dirname(__file__)))
 if base_dir not in sys.path:
