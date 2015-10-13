@@ -77,7 +77,7 @@ Available commands are in :mod:`distutilazy.command` package, each command as a 
 Development
 -----------
 * Code is hosted on `GitHub <https://github.com/farzadghanei/distutilazy>`_.
-* Documentations are on `Read The Docs <https://distutilazy.readthedocs.org`_.
+* Documentations are on `Read The Docs <https://distutilazy.readthedocs.org>`_.
 
 
 Tests

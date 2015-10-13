@@ -92,7 +92,7 @@ and use that custom class in ``cmdclass``.
 Development
 -----------
 * Code is hosted on `GitHub <https://github.com/farzadghanei/distutilazy>`_.
-* Documentations are on `Read The Docs <https://distutilazy.readthedocs.org`_.
+* Documentations are on `Read The Docs <https://distutilazy.readthedocs.org>`_.
 
 
 Tests
