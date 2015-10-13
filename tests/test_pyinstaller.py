@@ -1,28 +1,30 @@
 """
-    distutilazy.tests.test_pyinstaller
-    ----------------------------------
+distutilazy.tests.test_pyinstaller
+----------------------------------
 
-    Tests for distutilazy.pyinstaller module.
+Tests for distutilazy.pyinstaller module.
 
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
-from __future__ import absolute_import
-
 import sys
-import os
-import unittest
+from os.path import dirname
+from unittest import TestCase, main
 import re
 
-from .setup_test_env import *
-from distutilazy import pyinstaller
+here = dirname(__file__)
+sys.path.insert(0, dirname(here))
+sys.path.insert(0, here)
+
+from distutilazy.pyinstaller import BdistPyInstaller, CleanAll
 from distutils.dist import Distribution
 
-class TestPyinstaller(unittest.TestCase):
+
+class TestPyinstaller(TestCase):
 
     def test_finalize_opts(self):
         dist = Distribution()
-        pi = pyinstaller.bdist_pyinstaller(dist)
+        pi = BdistPyInstaller(dist)
         pi.target = "fake.py"
         pi.finalize_options()
         self.assertTrue( re.match(".+", pi.name) )
@@ -30,9 +32,12 @@ class TestPyinstaller(unittest.TestCase):
 
     def test_clean_all(self):
         dist = Distribution()
-        cl = pyinstaller.clean_all(dist)
+        cl = CleanAll(dist)
         cl.finalize_options()
         paths = cl.get_extra_paths()
         self.assertTrue(paths)
         spec = paths.pop()
         self.assertTrue( re.match("\S+\.spec", spec) )
+
+if __name__ == "__main__":
+    main()

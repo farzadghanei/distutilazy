@@ -1,81 +1,76 @@
 """
-    distutilazy.tests.test_test
-    ----------------------------
+distutilazy.tests.test_test
+----------------------------
 
-    Tests for distutilazy.test module
+Tests for distutilazy.test module
 
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
 from __future__ import absolute_import
 
 import sys
-import os
-from os import path
-import shutil
-import unittest
-
-from .setup_test_env import TEST_DIR
-from distutilazy import test
+from os.path import dirname, basename
 from distutils.dist import Distribution
+from unittest import TestCase, TestSuite, main
 
-# if running in a cached compiled python file
-# assume filename as python source file.
-# when tests are running together, test_clean
-# removes pyc files. but .py file will be available
-if __file__[-1].lower() == 'c':
-    __file__ = __file__[:-1]
+here = dirname(__file__)
+sys.path.insert(0, dirname(here))
+sys.path.insert(0, here)
 
-class TestTest(unittest.TestCase):
-    def _get_module_filenames(self, modules):
-        return map(lambda m: path.basename(m.__file__), modules)
+from distutilazy.test import RunTests, test_suite_for_modules
+
+__file__ = basename(__file__[:-1] if __file__.endswith('.pyc') else __file__)
+
+
+def get_module_names(modules):
+    return map(lambda m: m.__name__, modules)
+
+
+class TestTest(TestCase):
 
     def test_find_modules_from_package_path(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        here = path.dirname(__file__)
-        filename = path.basename(__file__)
-        modules = test_.find_test_modules_from_package_path(here)
-        self.assertIn(filename, self._get_module_filenames(modules))
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        modules = test_runner.find_test_modules_from_package_path(here)
+        self.assertIn('tests.test_test', get_module_names(modules))
 
     def test_get_modules_from_files(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        self.assertEqual([], test_.get_modules_from_files(['none_existing_file']))
-        modules = test_.get_modules_from_files([__file__])
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        self.assertEqual(
+            [], test_runner.get_modules_from_files(['none_existing_file']))
+        modules = test_runner.get_modules_from_files([__file__])
         self.assertEqual(1, len(modules))
-        self.assertEqual(path.basename(__file__), path.basename(modules.pop().__file__))
+        self.assertEqual('test_test', modules.pop().__name__)
 
-    def test_find_modules_from_files(self):
+    def test_find_test_modules_from_test_files(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        here = path.dirname(__file__)
-        filename = path.basename(__file__)
-        modules = test_.find_test_modules_from_test_files(here, 'none_exiting_pattern')
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        modules = test_runner.find_test_modules_from_test_files(
+            here, 'none_exiting_pattern')
         self.assertEqual([], modules)
-        modules = test_.find_test_modules_from_test_files(here, filename)
+        modules = test_runner.find_test_modules_from_test_files(here, __file__)
         self.assertEqual(1, len(modules))
-        self.assertEqual(filename, path.basename(modules.pop().__file__))
-        modules = test_.find_test_modules_from_test_files(here, 'test_*')
-        module_names = map(lambda mod: path.basename(mod.__file__), modules)
-        self.assertIn(filename, module_names)
-        self.assertIn('test_subdir.py', module_names)
+        self.assertEqual('tests.test_test', modules.pop().__name__)
+        modules = test_runner.find_test_modules_from_test_files(here, 'test_*')
+        module_names = get_module_names(modules)
+        self.assertIn('tests.test_test', module_names)
+        self.assertIn('test_subdir', module_names)
 
     def test_test_suite_for_modules(self):
-        dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        suite = test_.test_suite_for_modules([])
-        self.assertIsInstance(suite, unittest.TestSuite)
+        self.assertIsInstance(test_suite_for_modules([]), TestSuite)
 
     def test_get_test_runner(self):
         dist = Distribution()
-        test_ = test.run_tests(dist)
-        test_.finalize_options()
-        runner = test_.get_test_runner()
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        runner = test_runner.get_test_runner()
         self.assertTrue(hasattr(runner, 'run'))
         self.assertTrue(hasattr(runner.run, '__call__'))
 
+if __name__ == '__main__':
+    main()

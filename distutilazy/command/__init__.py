@@ -1,23 +1,11 @@
 """
+distutilazy.command
+-------------------
 
-    distutilazy.command
-    -----------
+Extra distutils commands using command classes provided by distutilazy
 
-    Extra commands for setup.py using classes provided by distutilazy
-
-    :license: MIT, see LICENSE for more details.
+:license: MIT, see LICENSE for more details.
 """
 
-import os
-import sys
-
-__all__ = ["clean_pyc", "clean_all", "bdist_pyinstaller", "test"]
-
-base_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-if not base_dir in sys.path:
-    if len(sys.path):
-        sys.path.insert(1, base_dir)
-    else:
-        sys.path.append(base_dir)
-
-
+__all__ = ("clean_pyc", "clean_all", "clean_jython_class",
+           "bdist_pyinstaller", "test")
