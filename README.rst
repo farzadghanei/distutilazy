@@ -46,7 +46,7 @@ of command packages in your ``setup.cfg`` file.
 That's it. Now you may use new commands directly from your ``setup.py``.
 
 To run unit tests (using standard library ``unittest``) in your project
-(by default runs tests/test*.py files from current path):
+(by default runs `tests/test*.py` files from current path):
 
 .. code-block:: bash
 
@@ -62,7 +62,7 @@ To clean all temporary files (build artifacts, compiled files created by CPython
 
 .. code-block:: bash
 
-    $ python setup.py clean_pyc
+    $ python setup.py clean_all
 
 
 Available commands are in ``distutilazy.command`` package, each command as a separate module.
