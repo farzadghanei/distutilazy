@@ -1,8 +1,8 @@
 """
 distutilazy.command
------------
+-------------------
 
-Extra commands for setup.py using classes provided by distutilazy
+Extra distutils commands using command classes provided by distutilazy
 
 :license: MIT, see LICENSE for more details.
 """
@@ -10,7 +10,8 @@ Extra commands for setup.py using classes provided by distutilazy
 from os.path import abspath, dirname
 import sys
 
-__all__ = ["clean_pyc", "clean_all", "bdist_pyinstaller", "test"]
+__all__ = ("clean_pyc", "clean_all", "clean_jython_class",
+           "bdist_pyinstaller", "test")
 
 base_dir = abspath(dirname(dirname(dirname(__file__))))
 if base_dir not in sys.path:

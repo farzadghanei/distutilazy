@@ -39,7 +39,8 @@ class BaseFileSystemCleanerCommand(Command):
         if not os.path.exists(self.root):
             raise IOError("Failed to access root path '{}'".format(self.root))
         self.extensions = [ext.strip() for ext in self.extensions.split(',')]
-        self.directories = [dir_.strip() for dir_ in self.directories.split(',')]
+        self.directories = [
+            dir_.strip() for dir_ in self.directories.split(',')]
 
     def _find_files(self):
         """Find files recursively in the root path
