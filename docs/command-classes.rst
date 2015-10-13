@@ -2,7 +2,7 @@
 Command Classes
 ***************
 
-Command classes are where the functionality of each command is implemented. Mutiple command classes
+Command classes are where the functionality of each command is implemented. Multiple command classes
 can be defined in a single module, for example the :mod:`distutilazy.clean` defines:
 
 * :class:`~distutilazy.clean.CleanPyc`: Clean compiled files created by CPython (.pyc files and __pycache__ directories)
@@ -22,7 +22,7 @@ of :func:`setup` function in :file:`setup.py` file.
     from distutils.core import setup
 
     setup(
-        cmdclasses= {
+        cmdclass= {
             "clear": distutilazy.clean.CleanAll,
             "unittests": distutilazy.test.RunTests
         }
@@ -54,7 +54,7 @@ Or create a custom class, to extend the ones provided by default:
         pass
 
     setup(
-        cmdclasses= {
+        cmdclass= {
             "clear": MyCleaner
         }
     )
@@ -66,7 +66,7 @@ All the command classes extend from :class:`distutils.core.Command` class, and t
 
     Initialize options of the command (as attributes of the object).
     This is called by `distutils.core.Command` after the command
-    objet has been constructed.
+    object has been constructed.
 
 .. method:: finalize_options()
 
@@ -94,11 +94,11 @@ Here we introduce available modules, and classes they provide.
     .. data:: root
 
         Command option, the path to root directory where cleaning process would affect.
-        (default is currenct path).
+        (default is current path).
 
     .. data:: extensions
 
-        Command option, a comma separated string of file extensions that will be cleand
+        Command option, a comma separated string of file extensions that will be cleaned
 
     .. data:: directories
 
@@ -135,11 +135,11 @@ Here we introduce available modules, and classes they provide.
     .. data:: root
 
         Command option, the path to root directory where cleaning process would affect.
-        (default is currenct path).
+        (default is current path).
 
     .. data:: extensions
 
-        Command option, a comma separated string of file extensions that will be cleand
+        Command option, a comma separated string of file extensions that will be cleaned
 
     .. data:: directories
 
@@ -168,11 +168,11 @@ Here we introduce available modules, and classes they provide.
     .. data:: root
 
         Command option, the path to root directory where cleaning process would affect.
-        (default is currenct path).
+        (default is current path).
 
     .. data:: extensions
 
-        A command option, a comma separated string of file extensions that will be cleand
+        A command option, a comma separated string of file extensions that will be cleaned
 
     .. data:: directories
 
@@ -181,7 +181,7 @@ Here we introduce available modules, and classes they provide.
 
     .. method:: default_extensions()
 
-        Return list of file extensions that are used for file exteions to be cleaned
+        Return list of file extensions that are used for file extensions to be cleaned
         by default.
 
     .. method:: default_directories()
@@ -222,7 +222,7 @@ Here we introduce available modules, and classes they provide.
         Command option, a Unix file name pattern (like :mod:`fnmatch`) to match
         tests files with.
         This is used when no files are specified to run, and the
-        :arttr:`~distutilazy.test.RunTests.root` is
+        :attr:`~distutilazy.test.RunTests.root` is
         not a package that specifies the tests with its ``__all__`` attr
         (Default is "test*.py").
 
