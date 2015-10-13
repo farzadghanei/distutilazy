@@ -3,7 +3,7 @@ Command Classes
 ***************
 
 Command classes are where the functionality of each command is implemented. Mutiple command classes
-can be defined in a single module (for example the :mod:`distutilazy.clean` module, defines:
+can be defined in a single module, for example the :mod:`distutilazy.clean` defines:
 
 * :class:`~distutilazy.clean.CleanPyc`: Clean compiled files created by CPython (.pyc files and __pycache__ directories)
 * :class:`~distutilazy.clean.CleanJythonClass`: Clean compiled .class files created by Jython
@@ -12,11 +12,8 @@ can be defined in a single module (for example the :mod:`distutilazy.clean` modu
 
 Using Command Classes
 =====================
-To use command classes, it's possible to pass them directly for ``cmdclass`` argument of :func:`setup` function,
-or define another class that extends these command classes (may customize the behavior as required), and
-use that custom class with ``cmdclass`` for :func:`setup`.
-
-To use the command classes directly for :func:`setup`, modify the :file:`setup.py`:
+To use command classes, pass the classes (or custom classes extending them) as ``cmdclass`` argument
+of :func:`setup` function in :file:`setup.py` file.
 
 .. code-block:: python
 
@@ -46,7 +43,7 @@ To remove all temporary files run
     $ python setup.py clear
 
 
-Extending the classes:
+Or create a custom class, to extend the ones provided by default:
 
 .. code-block:: python
 
@@ -96,39 +93,39 @@ Here we introduce available modules, and classes they provide.
 
     .. data:: root
 
-        A command option, the path to root directory where cleaning process would affect.
+        Command option, the path to root directory where cleaning process would affect.
         (default is currenct path).
 
     .. data:: extensions
 
-        A command option, a comma separated string of file extensions that will be cleand
+        Command option, a comma separated string of file extensions that will be cleand
 
     .. data:: directories
 
-        A command option, a comma separated string of directory names that will be cleaned
+        Command option, a comma separated string of directory names that will be cleaned
         recursively from root path
 
     .. method:: default_extensions()
 
-        Returns list of file extensions that are used for compiled Python files
+        Return list of file extensions that are used for compiled Python files
 
     .. method:: default_directories()
 
-        Returns list of directory names that are used to store compiled Python files
+        Return list of directory names that are used to store compiled Python files
 
     .. method:: find_compiled_files()
 
-        Returns list of absolute paths of all compiled Python files found from
+        Return list of absolute paths of all compiled Python files found from
         the :attr:`~CleanPyc.root` directory recursively.
 
     .. method:: find_cache_directories()
 
-        Returns list of absolute paths of all cache directories found from
-        the :attr:`~CleanPyc.root` directory recursively.
+        Return list of absolute paths of all cache directories found from
+        the :attr:`~distutilazy.clean.CleanPyc.root` directory recursively.
 
 .. class:: clean_pyc
 
-    Alias to CleanPyc
+    Alias to :class:`~distutilazy.clean.CleanPyc`
 
 
 .. class:: CleanJythonClass
@@ -137,7 +134,40 @@ Here we introduce available modules, and classes they provide.
 
     .. data:: root
 
-        A command option, the path to root directory where cleaning process would affect.
+        Command option, the path to root directory where cleaning process would affect.
+        (default is currenct path).
+
+    .. data:: extensions
+
+        Command option, a comma separated string of file extensions that will be cleand
+
+    .. data:: directories
+
+        Command option, a comma separated string of directory names that will be cleaned
+        recursively from root path
+
+    .. method:: default_extensions()
+
+        Return list of file extensions that are used for compiled class files
+
+    .. method:: default_directories()
+
+        Return list of directory names that are used to store class files
+
+    .. method:: find_class_files()
+
+        Return list of absolute paths of all compiled class files found from
+        the :attr:`~distutilazy.clean.CleanJythonClass.root` directory recursively.
+
+
+.. class:: CleanAll
+
+    Command class to clean all temporary files (compiled files created by Jython, CPython),
+    build and dist directories, etc.
+
+    .. data:: root
+
+        Command option, the path to root directory where cleaning process would affect.
         (default is currenct path).
 
     .. data:: extensions
@@ -146,18 +176,87 @@ Here we introduce available modules, and classes they provide.
 
     .. data:: directories
 
-        A command option, a comma separated string of directory names that will be cleaned
+        Command option, a comma separated string of directory names that will be cleaned
         recursively from root path
 
     .. method:: default_extensions()
 
-        Returns list of file extensions that are used for compiled class files
+        Return list of file extensions that are used for file exteions to be cleaned
+        by default.
 
     .. method:: default_directories()
 
-        Returns list of directory names that are used to store class files
+        Return list of directory names that are going to be cleaned by default.
 
-    .. method:: find_class_files()
 
-        Returns list of absolute paths of all compiled class files found from
-        the :attr:`~CleanPyc.root` directory recursively.
+.. class:: clean_all
+
+    Alias to :class:`~distutilazy.clean.CleanAll`
+
+
+:mod:`distutilazy.test` -- Class command to run unit tests
+==========================================================
+
+.. module:: distutilazy.test
+    :synopsis: Define command class to run unit tests
+.. moduleauthor:: Farzad Ghanei
+
+.. function:: test_suite_for_modules(modules) -> unittest.TestSuite
+
+    Return a test suite containing test cases found in all the specified modules.
+
+
+.. class:: RunTests
+
+    Command class to find test cases and run them (using standard library :mod:`unittest`)
+
+    .. data:: root
+
+        Command option, the path to root directory to find test modules from.
+        If this path is a package and provides ``__all__``, then this list
+        is considered as the list of test modules and no more search happens
+        for other files (Default is "tests").
+
+    .. data:: pattern
+
+        Command option, a Unix file name pattern (like :mod:`fnmatch`) to match
+        tests files with.
+        This is used when no files are specified to run, and the
+        :arttr:`~distutilazy.test.RunTests.root` is
+        not a package that specifies the tests with its ``__all__`` attr
+        (Default is "test*.py").
+
+    .. data:: files
+
+        Command option, a comma separated string of file names to search for
+        test cases. If specified, only the test cases in these files run.
+
+    .. data:: verbosity
+
+        Command option, an integer (1 .. 3) specifying the verbosity of the test runner
+        (Default is 1).
+
+    .. method:: get_modules_from_files(files)
+
+        Accept a list of file paths, import them as modules and return
+        a list of module objects.
+
+    .. method:: find_test_modules_from_package_path(self, package_path)
+
+        Find modules from the package specified by package_path ``__all__`` attr,
+        import them and return the modules.
+
+    .. method:: find_test_modules_from_test_files(self, root, pattern)
+
+        Find files whose name matches the ``pattern`` from the ``root`` path,
+        then import them and return the modules.
+
+    .. method:: get_test_runner()
+
+        Return a `TestRunner` to run the test suite, configured with the
+        :attr:`~distutilazy.test.RunTests.verbosity` option.
+
+.. class:: run_tests
+
+    Alias to :class:`~distutilazy.test.RunTests`
+
