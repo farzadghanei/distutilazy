@@ -1,2 +1,2 @@
-include README.rst LICENSE Makefile
+include README.rst LICENSE Makefile setup.cfg
 recursive-include tests *
