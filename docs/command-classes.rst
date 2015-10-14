@@ -80,7 +80,7 @@ All the command classes extend from :class:`distutils.core.Command` class, and t
 
 Here we introduce available modules, and classes they provide.
 
-:mod:`distutilazy.clean` -- Class commands to clean temporary files
+:mod:`distutilazy.clean` -- Command class to clean temporary files
 ===================================================================
 
 .. module:: distutilazy.clean
@@ -125,7 +125,7 @@ Here we introduce available modules, and classes they provide.
 
 .. class:: clean_pyc
 
-    Alias to :class:`~distutilazy.clean.CleanPyc`
+    Alias to :class:`distutilazy.clean.CleanPyc`
 
 
 .. class:: CleanJythonClass
@@ -191,10 +191,96 @@ Here we introduce available modules, and classes they provide.
 
 .. class:: clean_all
 
-    Alias to :class:`~distutilazy.clean.CleanAll`
+    Alias to :class:`distutilazy.clean.CleanAll`
 
 
-:mod:`distutilazy.test` -- Class command to run unit tests
+
+:mod:`distutilazy.pyinstaller` -- Command class to run PyInstaller
+==================================================================
+
+.. module:: distutilazy.pyinstaller
+    :synopsis: Define command class to run PyInstaller
+.. moduleauthor:: Farzad Ghanei
+
+
+.. class:: BdistPyInstaller
+
+    Command class to run PyInstaller
+
+    .. data:: clean
+
+        Command option, Boolean value to specify if PyInstaller
+        should clean spec files before bundling the application.
+        (Default is False)
+
+    .. data:: hidden_imports
+
+        Command option, a comma separated string of modules to
+        force import (same as --hidden-import option of PyInstaller)
+
+    .. data:: icon
+
+        Command option, path to the icon file used for the executable
+
+    .. data:: name
+
+        Command option, name of the bundled executable.
+        (Default is found from the current distribution name)
+
+    .. data:: paths
+
+        Command option, a list of extra paths to search for modules to
+        import from, separated by the standard path separator of current
+        platform (; on Windows and : on Others).
+
+    .. data:: pyinstaller_path
+
+        Command option, path to PyInstaller executable.
+        (By default is "pyinstaller" and will be found on shell path)
+
+    .. data:: target
+
+        Command option, path to target file to bundle
+
+
+    .. data:: windowed
+
+        Command option, Boolean value to specify if the application
+        is a windowed application or not. (Default is False)
+
+    .. method:: default_imports()
+
+        Return a list of modules to be imported by default
+
+    .. method:: default_paths()
+
+        Return a list of extra paths to search for modules by default
+
+    .. method:: default_pyinstaller_opts()
+
+        Return a list of PyInstaller options used by default
+
+
+.. class:: bdist_pyinstaller
+
+    Alias to :class:`distutilazy.pyinstaller.BdistPyInstaller`
+
+.. class:: CleanAll
+
+    Command class to clean all temporary files, including PyInstaller spec files.
+    Extends :class:`distutilazy.clean.CleanAll` and has the same attributes and methods.
+
+    .. data:: name
+
+        name of the bundled app which is used for the auto generated spec file name.
+
+.. class:: clean_all
+
+    Alias to :class:`distutilazy.pyinstaller.CleanAll`
+
+
+
+:mod:`distutilazy.test` -- Command class to run unit tests
 ==========================================================
 
 .. module:: distutilazy.test
@@ -258,5 +344,6 @@ Here we introduce available modules, and classes they provide.
 
 .. class:: run_tests
 
-    Alias to :class:`~distutilazy.test.RunTests`
+    Alias to :class:`distutilazy.test.RunTests`
+
 

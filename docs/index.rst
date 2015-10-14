@@ -24,6 +24,7 @@ Extra distutils commands, including:
 
 Installation
 ============
+
 Use ``pip`` to install from PyPI:
 
 .. code-block:: bash
@@ -43,6 +44,7 @@ Tests pass on Jython so it should be fine for Jython as well.
 
 How
 ===
+
 After installing distutilazy, add :mod:`distutilazy.command` package to the list
 of command packages in your ``setup.cfg`` file.
 
@@ -76,12 +78,14 @@ Available commands are in :mod:`distutilazy.command` package, each command as a 
 
 Development
 -----------
+
 * Code is hosted on `GitHub <https://github.com/farzadghanei/distutilazy>`_.
 * Documentations are on `Read The Docs <https://distutilazy.readthedocs.org>`_.
 
 
 Tests
 ^^^^^
+
 If you have make available
 
 .. code-block:: bash
@@ -97,4 +101,5 @@ You can always use ``setup.py`` to run tests:
 
 License
 -------
+
 Distutilazy is released under the terms of `MIT license <http://opensource.org/licenses/MIT>`_.
