@@ -28,8 +28,8 @@ To install from the source, download the source and run
 
     $ python setup.py install
 
-There are no specific dependencies (however having ``setuptools`` is recommended),
-it runs on Python 2.7+ (CPython 2.7, 3.2, 3.3, 3.4 and 3.5, PyPy 2.6 and PyPy3 2.4 are tested).
+There are no specific dependencies, distutilazy runs on Python 2.7+
+(CPython 2.7, 3.2, 3.3, 3.4 and 3.5, PyPy 2.6 and PyPy3 2.4 are tested).
 Tests pass on Jython so it should be fine for Jython as well.
 
 
