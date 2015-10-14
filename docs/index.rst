@@ -8,7 +8,7 @@ Contents:
    :maxdepth: 2
 
    command-classes
-   commands-package
+   command-package
 
 
 Introduction
@@ -46,7 +46,7 @@ How
 ===
 
 After installing distutilazy, add :mod:`distutilazy.command` package to the list
-of command packages in your ``setup.cfg`` file.
+of `command_packages` in your :file:`setup.cfg` file.
 
 .. code-block:: ini
 
