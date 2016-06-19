@@ -7,7 +7,7 @@ command classes to help run tests
 :license: MIT, see LICENSE for more details.
 """
 
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import os
 from os.path import abspath, basename, dirname
@@ -18,7 +18,7 @@ import unittest
 from distutils.core import Command
 from types import ModuleType
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 
 def test_suite_for_modules(modules):
@@ -28,6 +28,20 @@ def test_suite_for_modules(modules):
         module_tests = test_loader.loadTestsFromModule(module)
         suite.addTests(module_tests)
     return suite
+
+
+def find_source_filename(source_name, dir_path):
+    """Find the filename matching the source/module name
+    in the specified path. For example searching for "queue"
+    might return "queue.py" or "queue.pyc"
+    """
+    source_filenames = [
+            os.path.join(dir_path, source_name + ext) for
+            ext in (".py", "pyc")]
+    for source_filename in source_filenames:
+        if os.path.exists(source_filename):
+            return source_filename
+    return None
 
 
 class RunTests(Command):
@@ -43,6 +57,7 @@ class RunTests(Command):
         self.pattern = "test*.py"
         self.verbosity = 1
         self.files = None
+        self.except_import_errors = "no"
 
     def finalize_options(self):
         if not os.path.exists(self.root):
@@ -54,22 +69,23 @@ class RunTests(Command):
             self.verbosity = verbosity
         if self.files:
             self.files = map(lambda name: name.strip(), self.files.split(','))
+        self.except_import_errors = self.except_import_errors.lower().strip() == "yes"
 
     def get_modules_from_files(self, files):
         modules = []
         for file_name in files:
             directory = dirname(file_name)
-            package_name = self._import_dir_as_package(directory)
-            if not package_name:
-                sys.path.insert(0, directory)
             module_name, _, extension = basename(file_name).rpartition('.')
             if not module_name:
                 self.announce(
                     "failed to find module name from filename '{}'." +
                     "skipping this file".format(file_name))
                 continue
+            package_name = self._import_dir_as_package(directory)
             if package_name:
                 module_name = '.' + module_name
+            elif directory not in sys.path:
+                sys.path.insert(0, directory)
             self.announce(
                 "importing module '{}' from file '{}' ...".format(module_name,
                                                                   file_name))
@@ -77,23 +93,28 @@ class RunTests(Command):
             modules.append(module)
         return modules
 
-    def _import_dir_as_package(self, directory, ensure=False):
+    def _import_dir_as_package(self, directory):
+        """Tries to import the specified directory path as a package, if it
+        seems to be a package. Returns the package name (if import was
+        successful) or None if directory is not a valid package."""
+
         package_name = basename(directory)
         abs_dir = abspath(directory)
-        if package_name:
+        if package_name and find_source_filename('__init__', abs_dir) is not None:
+            parent_dir = dirname(abs_dir)
+            if not parent_dir in sys.path:
+                sys.path.insert(0, parent_dir)
             try:
                 self.announce(
-                    "importing '{0}' as package ...".format(package_name))
+                    "importing '{}' as package ...".format(package_name))
                 package = import_module(package_name)
-                if ensure and hasattr(package, '__path__') and \
-                            abspath(package.__path__[0]) != abs_dir:
-                    raise ImportError(
-                        "directory '{}' is not a package to import".format(
-                            abs_dir))
             except ImportError as err:
                 self.announce(
                     "failed to import '{}'. {}".format(package_name, err))
-                package_name = None
+                if self.except_import_errors and package_name in str(err):
+                    package_name = None
+                else:
+                    raise err
         return package_name
 
     def find_test_modules_from_package_path(self, package_path):
@@ -132,7 +153,7 @@ class RunTests(Command):
         abs_root = abspath(root)
         for (dir_path, directories, file_names) in os.walk(abs_root):
             package_name = self._import_dir_as_package(dir_path)
-            if not package_name:
+            if not package_name and not dir_path in sys.path:
                 sys.path.insert(0, dir_path)
             for filename in fnmatch.filter(file_names, pattern):
                 module_name, _, extension = basename(filename).rpartition('.')
@@ -141,21 +162,27 @@ class RunTests(Command):
                         "failed to find module name from filename '{}'." +
                         "skipping this test".format(filename))
                     continue
-                if package_name:
-                    module_name = '.' + module_name
+                module_name_to_import = '.' + module_name if package_name else module_name
                 self.announce(
                     "importing module '{}' from '{}' ...".format(
-                        module_name, filename
+                        module_name_to_import, filename
                     )
                 )
                 try:
-                    module = import_module(module_name, package_name)
+                    module = import_module(module_name_to_import, package_name)
                     if type(module) == ModuleType and module not in modules:
                         modules.append(module)
-                except (ImportError, ValueError, SystemError) as ex:
+                except ImportError as err:
                     self.announce(
                         "failed to import '{}' from '{}'. {}." +
-                        "skipping this file!".format(module_name, filename, ex)
+                        "skipping this file!".format(module_name_to_import, filename, err)
+                    )
+                    if not self.except_import_errors or module_name not in str(err):
+                        raise err
+                except (ValueError, SystemError) as err:
+                    self.announce(
+                        "failed to import '{}' from '{}'. {}." +
+                        "skipping this file!".format(module_name, filename, err)
                     )
         return modules
 
