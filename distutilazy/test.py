@@ -125,25 +125,19 @@ class RunTests(Command):
         package_name = basename(package_path)
         if package_dir:
             sys.path.insert(0, package_dir)
-        try:
-            self.announce(
-                "importing package '{}' ...".format(package_name)
-            )
-            package = import_module(package_name)
-            if package and hasattr(package, '__all__'):
-                modules = []
-                for module_name in package.__all__:
-                    module = import_module('{}.{}'.format(
-                        package_name, module_name))
-                    if type(module) == ModuleType \
-                            and module not in modules:
-                        modules.append(module)
-                return modules
-        except ImportError as err:
-            self.announce(
-                "failed to import '{}'. not a package. {}".format(
-                    package_name, err))
-        return []
+        self.announce(
+            "importing package '{}' ...".format(package_name)
+        )
+        package = import_module(package_name)
+        if package and hasattr(package, '__all__'):
+            modules = []
+            for module_name in package.__all__:
+                module = import_module('{}.{}'.format(
+                    package_name, module_name))
+                if type(module) == ModuleType \
+                        and module not in modules:
+                    modules.append(module)
+            return modules
 
     def find_test_modules_from_test_files(self, root, pattern):
         """Return list of test modules from the the files in the path
