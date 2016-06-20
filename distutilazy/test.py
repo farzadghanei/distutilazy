@@ -7,7 +7,7 @@ command classes to help run tests
 :license: MIT, see LICENSE for more details.
 """
 
-from __future__ import absolute_import, print_function
+from __future__ import absolute_import
 
 import os
 from os.path import abspath, basename, dirname
@@ -50,14 +50,18 @@ class RunTests(Command):
                     ("pattern=", "p", "test file name pattern"),
                     ("verbosity=", "v", "verbosity level [1,2,3]"),
                     ("files=", None,
-                     "run specified test files (comma separated)")]
+                     "run specified test files (comma separated)"),
+                    ("except-import-errors", None,
+                        "except import errors when trying to import test " \
+                        "modules. Note: might shadow import errors raised " \
+                        "by the actual modules being tested")]
 
     def initialize_options(self):
         self.root = os.path.join(os.getcwd(), 'tests')
         self.pattern = "test*.py"
         self.verbosity = 1
         self.files = None
-        self.except_import_errors = "no"
+        self.except_import_errors = False
 
     def finalize_options(self):
         if not os.path.exists(self.root):
@@ -69,7 +73,7 @@ class RunTests(Command):
             self.verbosity = verbosity
         if self.files:
             self.files = map(lambda name: name.strip(), self.files.split(','))
-        self.except_import_errors = self.except_import_errors.lower().strip() == "yes"
+        self.except_import_errors = bool(self.except_import_errors)
 
     def get_modules_from_files(self, files):
         modules = []
