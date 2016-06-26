@@ -86,6 +86,18 @@ class TestTest(TestCase):
             'hasimport*'
         )
 
+    def test_find_test_modules_from_test_files_imports_from_subdirectories(self):
+        dist = Distribution()
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        directory_path = path_join(FIXTURES, "subdir")
+        modules = test_runner.find_test_modules_from_test_files(
+            directory_path, 'samplemodule*')
+        self.assertEquals(
+            ['samplemodule'],
+            get_module_names(modules)
+        )
+
     def test_test_suite_for_modules(self):
         self.assertIsInstance(test_suite_for_modules([]), TestSuite)
 
