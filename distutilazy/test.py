@@ -102,20 +102,22 @@ class RunTests(Command):
         seems to be a package. Returns the package name (if import was
         successful) or None if directory is not a valid package."""
 
-        package_name = basename(directory)
+        directory_name = basename(directory)
         abs_dir = abspath(directory)
-        if package_name and find_source_filename('__init__', abs_dir) is not None:
+        package_name = None
+        if directory_name and find_source_filename('__init__', abs_dir) is not None:
             parent_dir = dirname(abs_dir)
             if not parent_dir in sys.path:
                 sys.path.insert(0, parent_dir)
             try:
                 self.announce(
-                    "importing '{}' as package ...".format(package_name))
-                package = import_module(package_name)
+                    "importing '{}' as package ...".format(directory_name))
+                import_module(directory_name)
+                package_name = directory_name
             except ImportError as err:
                 self.announce(
-                    "failed to import '{}'. {}".format(package_name, err))
-                if self.except_import_errors and package_name in str(err):
+                    "failed to import '{}'. {}".format(directory_name, err))
+                if self.except_import_errors and directory_name in str(err):
                     package_name = None
                 else:
                     raise err
