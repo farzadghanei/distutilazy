@@ -61,7 +61,7 @@ class TestTest(TestCase):
         modules = test_runner.find_test_modules_from_test_files(HERE, 'test_*')
         module_names = get_module_names(modules)
         self.assertIn('tests.test_test', module_names)
-        self.assertIn('subdir.test_subdir', module_names)
+        self.assertIn('subpackage.test_subpackage', module_names)
 
     def test_test_suite_for_modules(self):
         self.assertIsInstance(test_suite_for_modules([]), TestSuite)
