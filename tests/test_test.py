@@ -81,6 +81,14 @@ class TestTest(TestCase):
         filename = path_join(FIXTURES, "hasimporterr.py")
         self.assertRaises(ImportError, test_runner.get_modules_from_files, [filename])
 
+    def test_get_modules_from_files_does_no_shadow_import_errors_when_excepting_errors(self):
+        dist = Distribution()
+        test_runner = RunTests(dist)
+        test_runner.finalize_options()
+        test_runner.except_import_errors = True
+        filename = path_join(FIXTURES, "hasimporterr.py")
+        self.assertRaises(ImportError, test_runner.get_modules_from_files, [filename])
+
     def test_find_test_modules_from_test_files_raises_import_error(self):
         dist = Distribution()
         test_runner = RunTests(dist)
