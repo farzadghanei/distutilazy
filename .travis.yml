@@ -5,7 +5,16 @@ python:
   - "3.3"
   - "3.2"
   - "2.7"
+
+before_install:
+  - pip install coverage
+  - pip install codecov
+
 script:
-    - "python setup.py test"
+  - "./run-test-coverage.py"
+
+after_success:
+  - codecov
+
 notifications:
       email: false
