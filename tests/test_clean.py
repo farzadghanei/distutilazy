@@ -29,7 +29,7 @@ class TestCleanPyc(TestCase):
         cls.test_cache_dir = abspath(path.join(here, '_test_py_cache_'))
         if path.exists(cls.test_cache_dir):
             raise Exception(
-                    "Test python cache directory exists in '{}'." \
+                    "Test python cache directory exists in '{}'."
                     " Please remove this path".format(cls.test_cache_dir)
                     )
         mkdir(cls.test_cache_dir)

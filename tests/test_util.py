@@ -22,6 +22,7 @@ if __file__.endswith('$py.class'):
 elif __file__.endswith('.pyc'):
     __file__ = __file__[:-1]
 
+
 class TestUtil(TestCase):
 
     def test_util_find_files(self):

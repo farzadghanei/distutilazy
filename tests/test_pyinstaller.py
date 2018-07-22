@@ -27,7 +27,7 @@ class TestPyinstaller(TestCase):
         pi = BdistPyInstaller(dist)
         pi.target = "fake.py"
         pi.finalize_options()
-        self.assertTrue( re.match(".+", pi.name) )
+        self.assertTrue(re.match(".+", pi.name))
         self.assertTrue(pi.pyinstaller_opts)
 
     def test_clean_all(self):
@@ -37,7 +37,8 @@ class TestPyinstaller(TestCase):
         paths = cl.get_extra_paths()
         self.assertTrue(paths)
         spec = paths.pop()
-        self.assertTrue( re.match("\S+\.spec", spec) )
+        self.assertTrue(re.match(r'\S+\.spec', spec))
+
 
 if __name__ == "__main__":
     main()
