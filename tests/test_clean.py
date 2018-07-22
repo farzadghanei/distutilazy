@@ -14,12 +14,10 @@ from os.path import dirname, abspath
 from unittest import TestCase, main
 from distutils.dist import Distribution
 from tempfile import mkstemp, mkdtemp
+from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 here = dirname(__file__)
-sys.path.insert(0, dirname(here))
 sys.path.insert(0, here)
-
-from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 
 class TestCleanPyc(TestCase):

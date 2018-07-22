@@ -11,11 +11,6 @@ import sys
 from os.path import dirname
 from unittest import TestCase, main
 import re
-
-here = dirname(__file__)
-sys.path.insert(0, dirname(here))
-sys.path.insert(0, here)
-
 from distutilazy.pyinstaller import BdistPyInstaller, CleanAll
 from distutils.dist import Distribution
 
