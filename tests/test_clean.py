@@ -7,19 +7,15 @@ Tests for distutilazy.clean module
 
 from __future__ import absolute_import
 
-import sys
 from shutil import rmtree
 from os import path, mkdir
 from os.path import dirname, abspath
 from unittest import TestCase, main
 from distutils.dist import Distribution
 from tempfile import mkstemp, mkdtemp
+from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 here = dirname(__file__)
-sys.path.insert(0, dirname(here))
-sys.path.insert(0, here)
-
-from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 
 class TestCleanPyc(TestCase):
@@ -29,7 +25,7 @@ class TestCleanPyc(TestCase):
         cls.test_cache_dir = abspath(path.join(here, '_test_py_cache_'))
         if path.exists(cls.test_cache_dir):
             raise Exception(
-                    "Test python cache directory exists in '{}'." \
+                    "Test python cache directory exists in '{}'."
                     " Please remove this path".format(cls.test_cache_dir)
                     )
         mkdir(cls.test_cache_dir)
@@ -159,7 +155,3 @@ class TestCleanJythonClass(TestCase):
         finally:
             if path.exists(temp_dir):
                 rmtree(temp_dir, True)
-
-
-if __name__ == "__main__":
-    main()

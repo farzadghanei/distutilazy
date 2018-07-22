@@ -7,20 +7,18 @@ Test distutilazy.util module.
 
 from __future__ import absolute_import
 
-import sys
 from os.path import dirname, realpath
 from unittest import TestCase, main
+from distutilazy import util
 
 here = dirname(__file__)
-sys.path.insert(0, dirname(here))
-sys.path.insert(0, here)
 
-from distutilazy import util
 
 if __file__.endswith('$py.class'):
     __file__ = __file__[:-9] + '.py'
 elif __file__.endswith('.pyc'):
     __file__ = __file__[:-1]
+
 
 class TestUtil(TestCase):
 

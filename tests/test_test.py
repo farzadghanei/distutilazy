@@ -9,18 +9,13 @@ Tests for distutilazy.test module
 
 from __future__ import absolute_import
 
-import sys
 from os.path import dirname, basename, abspath
 from os.path import join as path_join
 from distutils.dist import Distribution
 from unittest import TestCase, TestSuite, main
-
-TESTS_PATH = dirname(__file__)
-sys.path.insert(0, dirname(TESTS_PATH))
-sys.path.insert(0, TESTS_PATH)
-
 from distutilazy.test import RunTests, test_suite_for_modules
 
+TESTS_PATH = dirname(__file__)
 FIXTURES = path_join(dirname(abspath(__file__)), 'fixtures', 'test_test')
 current_test_file = basename(__file__[:-1] if __file__.endswith('.pyc') else __file__)
 
@@ -131,7 +126,3 @@ class TestTest(TestCase):
         self.assertRaises(ImportError,
                           test_runner.find_test_modules_from_test_files,
                           TESTS_PATH, 'hasimporterr*')
-
-
-if __name__ == '__main__':
-    main()

@@ -1,17 +1,21 @@
 language: python
 python:
+  - "3.7-dev"
+  - "3.6"
   - "3.5"
   - "3.4"
   - "3.3"
-  - "3.2"
   - "2.7"
+  - "pypy3.5"
 
 before_install:
   - pip install coverage
   - pip install codecov
+  - pip install pycodestyle
 
 script:
   - "./run-test-coverage.py"
+  - "pycodestyle --max-line-length=100 distutilazy"
 
 after_success:
   - codecov
