@@ -71,6 +71,6 @@ params = dict(
 )
 
 if setuptools:
-    params.update(zip_safe = True)
+    params.update(zip_safe=True)
 
 dist = setup(**params)

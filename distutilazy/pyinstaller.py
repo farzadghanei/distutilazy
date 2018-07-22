@@ -105,7 +105,7 @@ class BdistPyInstaller(Command):
         self.imports.extend(self.default_imports())
         if self.hidden_imports:
             self.imports.extend(
-                [i.strip() for i in self.hidden_imports.split(',') \
+                [i.strip() for i in self.hidden_imports.split(',')
                  if i.strip()]
             )
         for module in self.imports:
