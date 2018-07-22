@@ -33,7 +33,3 @@ class TestPyinstaller(TestCase):
         self.assertTrue(paths)
         spec = paths.pop()
         self.assertTrue(re.match(r'\S+\.spec', spec))
-
-
-if __name__ == "__main__":
-    main()

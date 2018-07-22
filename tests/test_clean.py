@@ -7,7 +7,6 @@ Tests for distutilazy.clean module
 
 from __future__ import absolute_import
 
-import sys
 from shutil import rmtree
 from os import path, mkdir
 from os.path import dirname, abspath
@@ -17,7 +16,6 @@ from tempfile import mkstemp, mkdtemp
 from distutilazy.clean import CleanPyc, CleanAll, CleanJythonClass
 
 here = dirname(__file__)
-sys.path.insert(0, here)
 
 
 class TestCleanPyc(TestCase):
@@ -157,7 +155,3 @@ class TestCleanJythonClass(TestCase):
         finally:
             if path.exists(temp_dir):
                 rmtree(temp_dir, True)
-
-
-if __name__ == "__main__":
-    main()

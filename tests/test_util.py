@@ -7,13 +7,11 @@ Test distutilazy.util module.
 
 from __future__ import absolute_import
 
-import sys
 from os.path import dirname, realpath
 from unittest import TestCase, main
 from distutilazy import util
 
 here = dirname(__file__)
-sys.path.insert(0, here)
 
 
 if __file__.endswith('$py.class'):
