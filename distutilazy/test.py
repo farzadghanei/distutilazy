@@ -52,8 +52,8 @@ class RunTests(Command):
                     ("files=", None,
                      "run specified test files (comma separated)"),
                     ("except-import-errors", None,
-                        "except import errors when trying to import test " \
-                        "modules. Note: might shadow import errors raised " \
+                        "except import errors when trying to import test "
+                        "modules. Note: might shadow import errors raised "
                         "by the actual modules being tested")]
 
     def initialize_options(self):
@@ -107,7 +107,7 @@ class RunTests(Command):
         package_name = None
         if directory_name and find_source_filename('__init__', abs_dir) is not None:
             parent_dir = dirname(abs_dir)
-            if not parent_dir in sys.path:
+            if parent_dir not in sys.path:
                 sys.path.insert(0, parent_dir)
             try:
                 self.announce(
@@ -153,7 +153,7 @@ class RunTests(Command):
         abs_root = abspath(root)
         for (dir_path, directories, file_names) in os.walk(abs_root):
             package_name = self._import_dir_as_package(dir_path)
-            if not package_name and not dir_path in sys.path:
+            if not package_name and dir_path not in sys.path:
                 sys.path.insert(0, dir_path)
             for filename in fnmatch.filter(file_names, pattern):
                 module_name, _, extension = basename(filename).rpartition('.')
@@ -206,5 +206,6 @@ class RunTests(Command):
         runner = self.get_test_runner()
         self.announce("running tests ...")
         runner.run(suite)
+
 
 run_tests = RunTests

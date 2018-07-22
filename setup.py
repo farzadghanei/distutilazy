@@ -21,8 +21,6 @@ except ImportError as exp:
     setuptools = None
     from distutils.core import setup
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 import distutilazy
 import distutilazy.clean
 import distutilazy.test
@@ -51,25 +49,26 @@ with open(os.path.join(os.path.dirname(__file__), "README.rst")) as fh:
     long_description = fh.read()
 
 params = dict(
-    name = "distutilazy",
-    author = "Farzad Ghanei",
-    author_email = "farzad.ghanei@gmail.com",
-    url = "http://github.com/farzadghanei/distutilazy/",
-    packages = ["distutilazy", "distutilazy.command"],
-    version = distutilazy.__version__,
-    description = "Extra distutils commands",
-    long_description = long_description,
-    license = "MIT",
-    classifiers = CLASSIFIERS,
-    cmdclass = {
+    name="distutilazy",
+    author="Farzad Ghanei",
+    author_email="farzad.ghanei@gmail.com",
+    url="http://github.com/farzadghanei/distutilazy/",
+    packages=["distutilazy", "distutilazy.command"],
+    version=distutilazy.__version__,
+    description="Extra distutils commands",
+    long_description=long_description,
+    license="MIT",
+    classifiers=CLASSIFIERS,
+    cmdclass={
         "clean_pyc": distutilazy.clean.CleanPyc,
         "clean_jython_class": distutilazy.clean.CleanJythonClass,
         "clean_all": distutilazy.clean.CleanAll,
         "test": distutilazy.test.RunTests
-        }
+        },
+    scripts=['scripts/distutilazy']
 )
 
 if setuptools:
-    params.update(zip_safe = True)
+    params.update(zip_safe=True)
 
 dist = setup(**params)
