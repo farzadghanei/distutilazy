@@ -21,8 +21,6 @@ except ImportError as exp:
     setuptools = None
     from distutils.core import setup
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 import distutilazy
 import distutilazy.clean
 import distutilazy.test
