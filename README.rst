@@ -5,7 +5,7 @@ Distutilazy
 .. image:: https://travis-ci.org/farzadghanei/distutilazy.svg?branch=master
     :target: https://travis-ci.org/farzadghanei/distutilazy
 
-.. image:: https://ci.appveyor.com/api/projects/status/2etguaw056kdktd4/branch/master?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/q4lhncemrsnpftgv?svg=true
     :target: https://ci.appveyor.com/project/farzadghanei/distutilazy?branch=master
 
 Extra distutils commands, including:
