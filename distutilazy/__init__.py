@@ -7,5 +7,5 @@ Extra distutils command classes.
 https://opensource.org/licenses/MIT
 """
 
-__version__ = '0.5.0'
+__version__ = '0.5.1'
 __all__ = ['clean', 'command', 'pyinstaller', 'test']
