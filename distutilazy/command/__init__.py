@@ -8,4 +8,4 @@ https://opensource.org/licenses/MIT
 """
 
 __all__ = ['clean_pyc', 'clean_all', 'clean_jython_class',
-        'bdist_pyinstaller', 'test']
+           'bdist_pyinstaller', 'test']
