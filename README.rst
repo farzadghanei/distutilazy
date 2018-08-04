@@ -16,6 +16,8 @@ Extra distutils commands, including:
 * bdist_pyinstaller: convenient calls for `PyInstaller <http://www.pyinstaller.org>`_ with sane defaults
 * test: run unit tests
 
+An entry point script is also provided to call commands directly, currently only
+the clean commands are exposed via the script.
 
 Installation
 ------------
@@ -32,7 +34,7 @@ To install from the source, download the source and run
     $ python setup.py install
 
 There are no specific dependencies, distutilazy runs on Python 2.7+
-(CPython 2.7, 3.2, 3.3, 3.4 and 3.5, PyPy 2.6 and PyPy3 2.4 are tested).
+(CPython 2.7, 3.3, 3.4, 3.5, 3.6, PyPy 2.6 and PyPy3.5 are tested).
 Tests pass on Jython so it should be fine for Jython as well.
 
 
@@ -47,13 +49,6 @@ of command packages in your ``setup.cfg`` file.
     command_packages = distutilazy.command
 
 That's it. Now you may use new commands directly from your ``setup.py``.
-
-To run unit tests (using standard library ``unittest``) in your project
-(by default runs `tests/test*.py` files from current path):
-
-.. code-block:: bash
-
-    $ python setup.py test
 
 To clean compiled python files:
 
@@ -90,6 +85,18 @@ using the ``cmdclass`` parameter.
 
 To extend (or customize) the behavior of the command classes define a class extending from these command classes,
 and use that custom class in ``cmdclass``.
+
+Entry Point Script
+^^^^^^^^^^^^^^^^^^
+The `distutilazy` script provides a direct access to the commands. call it with
+`-h` or `--help` to see available commands. For example this command runs
+the `clean_all` command (provided by distutilazy package) directly, even
+without a `setup.py` or `setup.cfg`.
+
+
+.. code-block:: bash
+
+    $ distutilazy clean_all
 
 
 Development
