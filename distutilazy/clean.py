@@ -1,10 +1,10 @@
 """
 distutilazy.clean
 -----------------
-
 command classes to help clean temporary files
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
 from __future__ import absolute_import

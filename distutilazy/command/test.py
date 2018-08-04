@@ -1,10 +1,10 @@
 """
 distutilazy.command.test
 ------------------------
-
 Command to run unit tests
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
 import distutilazy.test

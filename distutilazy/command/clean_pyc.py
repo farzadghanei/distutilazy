@@ -1,10 +1,10 @@
 """
 distutilazy.command.clean_pyc
 -----------------------------
-
 Command to clean compiled python files
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
 import distutilazy.clean

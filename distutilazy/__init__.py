@@ -1,11 +1,11 @@
 """
 distutilazy
 -----------
-
 Extra distutils command classes.
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
-__version__ = "0.4.2"
-__all__ = ("clean", "command", "pyinstaller", "test")
+__version__ = '0.5.0'
+__all__ = ['clean', 'command', 'pyinstaller', 'test']

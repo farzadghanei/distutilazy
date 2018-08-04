@@ -1,10 +1,10 @@
 """
 distutilazy.tests
 -----------------
-
 Tests for distutilazy
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
 from os.path import basename, splitext, join, dirname

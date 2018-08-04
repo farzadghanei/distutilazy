@@ -3,7 +3,8 @@ distutilazy.util
 ----------------
 utility functions
 
-:license: MIT, see LICENSE for more details.
+:license: MIT. For more details see LICENSE file or
+https://opensource.org/licenses/MIT
 """
 
 import os
